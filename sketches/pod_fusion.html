@@ -942,17 +942,17 @@
 
             noStroke();
 
-            // Outer glow
-            let glowLayers = 4 + min(pod.memberCount, 4);
+            // Outer glow - stronger alpha for vivid color
+            let glowLayers = 3;
             for (let i = glowLayers; i > 0; i--) {
-                let glowSize = size * (1 + i * 0.35);
-                let alpha = (1 - i / glowLayers) * 0.12 * depthAlpha;
-                if (pod.attracting) alpha *= 1.5;
+                let glowSize = size * (1 + i * 0.4);
+                let alpha = (1 - i / glowLayers) * 0.25 * depthAlpha;
+                if (pod.attracting) alpha *= 1.3;
                 fill(col.r, col.g, col.b, alpha);
                 ellipse(screenX, screenY, glowSize, glowSize);
             }
 
-            // Core with gradient (show member colors)
+            // Core - pure color, no white overlay
             if (pod.colors.length > 1) {
                 // Multi-color pie segments for fused pods
                 let segments = min(pod.colors.length, 6);
@@ -962,22 +962,14 @@
 
                     let segCol = hexToRgb(pod.colors[s % pod.colors.length]);
 
-                    fill(segCol.r, segCol.g, segCol.b, 0.9 * depthAlpha);
+                    fill(segCol.r, segCol.g, segCol.b, depthAlpha);
                     arc(screenX, screenY, size, size, angle1, angle2, PIE);
                 }
-
-                // Blend overlay for smooth look
-                fill(col.r, col.g, col.b, 0.3 * depthAlpha);
-                ellipse(screenX, screenY, size * 0.8, size * 0.8);
             } else {
-                // Single color core
-                fill(col.r, col.g, col.b, 0.95 * depthAlpha);
+                // Single color core - full opacity
+                fill(col.r, col.g, col.b, depthAlpha);
                 ellipse(screenX, screenY, size, size);
             }
-
-            // Inner bright core
-            fill(255, 255, 255, 0.5 * depthAlpha);
-            ellipse(screenX, screenY, size * 0.2, size * 0.2);
 
             // Orbiting particles for larger pods
             if (pod.memberCount >= 3) {
