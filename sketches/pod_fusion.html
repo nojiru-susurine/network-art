@@ -373,8 +373,12 @@
             <div class="control-section">
                 <h3>Theme Color</h3>
                 <div class="control-group">
-                    <label>Presets</label>
-                    <div class="preset-colors" id="preset-colors"></div>
+                    <label>Basic</label>
+                    <div class="preset-colors" id="preset-basic"></div>
+                </div>
+                <div class="control-group">
+                    <label>Splatoon</label>
+                    <div class="preset-colors" id="preset-splatoon"></div>
                 </div>
                 <div class="control-group">
                     <label>Color Harmony</label>
@@ -1363,22 +1367,36 @@
         // Color Presets
         // ═══════════════════════════════════════════════════════════════════════
 
-        const colorPresets = [
-            { name: 'Sakura', color: '#ffb7c5', harmony: 'analogous' },
-            { name: 'Ocean', color: '#4a90d9', harmony: 'analogous' },
-            { name: 'Sunset', color: '#ff7b54', harmony: 'analogous' },
-            { name: 'Forest', color: '#5cb85c', harmony: 'analogous' },
-            { name: 'Lavender', color: '#b088f4', harmony: 'analogous' },
-            { name: 'Gold', color: '#ffd700', harmony: 'analogous' },
-            { name: 'Coral', color: '#ff6b6b', harmony: 'complementary' },
-            { name: 'Mint', color: '#64f4d4', harmony: 'analogous' }
-        ];
+        const colorPresets = {
+            basic: [
+                { name: 'Sakura', color: '#ffb7c5', harmony: 'analogous' },
+                { name: 'Ocean', color: '#4a90d9', harmony: 'analogous' },
+                { name: 'Sunset', color: '#ff7b54', harmony: 'analogous' },
+                { name: 'Forest', color: '#5cb85c', harmony: 'analogous' },
+                { name: 'Lavender', color: '#b088f4', harmony: 'analogous' },
+                { name: 'Gold', color: '#ffd700', harmony: 'analogous' },
+                { name: 'Coral', color: '#ff6b6b', harmony: 'complementary' },
+                { name: 'Mint', color: '#64f4d4', harmony: 'analogous' }
+            ],
+            splatoon: [
+                { name: 'Pink', color: '#f02d7d', harmony: 'complementary' },
+                { name: 'Green', color: '#25d04a', harmony: 'complementary' },
+                { name: 'Orange', color: '#f78f2e', harmony: 'tetradic' },
+                { name: 'Purple', color: '#7b4fbf', harmony: 'triadic' }
+            ]
+        };
 
         function renderPresets() {
-            let container = document.getElementById('preset-colors');
+            // Render each category
+            renderPresetCategory('preset-basic', colorPresets.basic);
+            renderPresetCategory('preset-splatoon', colorPresets.splatoon);
+        }
+
+        function renderPresetCategory(containerId, presets) {
+            let container = document.getElementById(containerId);
             container.innerHTML = '';
 
-            for (let preset of colorPresets) {
+            for (let preset of presets) {
                 let btn = document.createElement('div');
                 btn.className = 'preset-btn';
                 if (params.themeColor === preset.color) {
