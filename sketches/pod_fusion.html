@@ -747,10 +747,6 @@
         function drawAmbientParticles() {
             noStroke();
 
-            // Get blended color from palette for "trust particles" feel
-            let blendedColor = blendColors(params.colorPalette);
-            let blendedRgb = hexToRgb(blendedColor);
-
             for (let i = 0; i < ambientParticles.length; i++) {
                 let p = ambientParticles[i];
 
@@ -764,24 +760,19 @@
                 let rotated = rotatePoint(newX, p.y, newZ);
                 let depth = map(rotated.z, -sphereRadius, sphereRadius, 0.4, 1);
 
-                // Use particle's assigned color from palette, blended with overall blend
+                // Use particle's assigned color from palette directly
                 let particleColor = params.colorPalette[p.colorIndex % params.colorPalette.length];
-                let particleRgb = hexToRgb(particleColor);
-
-                // Soft blend between particle color and overall blend for cohesion
-                let r = lerp(particleRgb.r, blendedRgb.r, 0.4);
-                let g = lerp(particleRgb.g, blendedRgb.g, 0.4);
-                let b = lerp(particleRgb.b, blendedRgb.b, 0.4);
+                let col = hexToRgb(particleColor);
 
                 // Soft glow effect for larger particles
                 let glowSize = p.size * depth;
 
                 // Outer glow
-                fill(r, g, b, p.alpha * depth * 0.3);
+                fill(col.r, col.g, col.b, p.alpha * depth * 0.3);
                 ellipse(rotated.x, rotated.y, glowSize * 2, glowSize * 2);
 
                 // Core particle
-                fill(r, g, b, p.alpha * depth);
+                fill(col.r, col.g, col.b, p.alpha * depth);
                 ellipse(rotated.x, rotated.y, glowSize, glowSize);
 
                 // Add trail occasionally for ethereal feel
@@ -789,9 +780,9 @@
                     particleTrails.push({
                         x: rotated.x,
                         y: rotated.y,
-                        r: r,
-                        g: g,
-                        b: b,
+                        r: col.r,
+                        g: col.g,
+                        b: col.b,
                         size: glowSize * 1.2,
                         life: 40,
                         maxLife: 40
@@ -936,9 +927,8 @@
             let pulse = sin(pod.phase) * 0.1 + 1;
             size *= pulse;
 
-            // Get blended color for multi-member pods
-            let blendedColor = blendColors(pod.colors);
-            let col = hexToRgb(blendedColor);
+            // Use first color directly (no blending)
+            let col = hexToRgb(pod.colors[0]);
 
             noStroke();
 
@@ -1083,8 +1073,7 @@
                 }
 
                 let alpha = fx.life / 40;
-                let blended = blendColors(fx.colors);
-                let col = hexToRgb(blended);
+                let col = hexToRgb(fx.colors[0]);
 
                 // Simple soft glow only
                 noStroke();
@@ -1254,24 +1243,6 @@
                 g: parseInt(result[2], 16),
                 b: parseInt(result[3], 16)
             } : { r: 255, g: 255, b: 255 };
-        }
-
-        function blendColors(colors) {
-            if (colors.length === 1) return colors[0];
-
-            let r = 0, g = 0, b = 0;
-            for (let c of colors) {
-                let rgb = hexToRgb(c);
-                r += rgb.r;
-                g += rgb.g;
-                b += rgb.b;
-            }
-
-            r = Math.round(r / colors.length);
-            g = Math.round(g / colors.length);
-            b = Math.round(b / colors.length);
-
-            return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
         function updateStats() {
