@@ -509,12 +509,14 @@
         let leaveEffects = [];
         let energyBridges = [];
         let ambientParticles = [];
+        let particleTrails = [];  // For particle trail effect
         let sphereRadius = 300;
         let rotationX = 0;
         let rotationY = 0;
         let time = 0;
         let totalFusions = 0;
         let totalLeaves = 0;
+        let breathPhase = 0;  // For breathing pulsation
 
         function setup() {
             let canvas = createCanvas(900, 900);
@@ -533,9 +535,11 @@
             leaveEffects = [];
             energyBridges = [];
             ambientParticles = [];
+            particleTrails = [];
             totalFusions = 0;
             totalLeaves = 0;
             time = 0;
+            breathPhase = 0;
 
             sphereRadius = min(width, height) * 0.32;
 
@@ -625,12 +629,19 @@
             background(13, 13, 26);
 
             time += 0.016;
+            breathPhase += 0.02;  // Breathing animation speed
 
             // Rotate sphere view - more dynamic rotation
             rotationY += 0.004 * params.rotationSpeed;
             rotationX = sin(time * 0.15) * 0.25 + 0.2; // Tilted view with oscillation
 
             translate(width / 2, height / 2);
+
+            // Draw warm core light at center
+            drawCoreLight();
+
+            // Draw breathing sphere boundary
+            drawBreathingSphere();
 
             // Draw sphere structure (disabled)
             // drawSphereStructure();
@@ -651,8 +662,9 @@
             // Update physics
             updatePods();
 
-            // Draw ambient particles
+            // Draw ambient particles with trails
             drawAmbientParticles();
+            drawParticleTrails();
 
             // Draw energy bridges
             drawEnergyBridges();
@@ -675,6 +687,91 @@
             checkLeaves();
 
             updateStats();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Background World Effects
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function drawCoreLight() {
+            // Warm glowing core at the center - represents the heart of relationships
+            let themeRgb = hexToRgb(params.themeColor);
+
+            // Breathing pulse effect
+            let breathScale = 1 + sin(breathPhase) * 0.15;
+
+            // Multiple layers of warm glow
+            noStroke();
+            for (let i = 12; i > 0; i--) {
+                let size = sphereRadius * 0.4 * (i / 12) * breathScale;
+                let alpha = 0.03 * (12 - i) / 12;
+
+                // Blend theme color with warm orange/yellow
+                let warmR = lerp(themeRgb.r, 255, 0.3);
+                let warmG = lerp(themeRgb.g, 180, 0.2);
+                let warmB = lerp(themeRgb.b, 100, 0.4);
+
+                fill(warmR, warmG, warmB, alpha);
+                ellipse(0, 0, size, size);
+            }
+
+            // Inner bright core
+            let coreSize = 30 * breathScale;
+            for (let i = 5; i > 0; i--) {
+                let size = coreSize * (i / 5);
+                let alpha = 0.15 * (5 - i) / 5;
+                fill(255, 240, 220, alpha);
+                ellipse(0, 0, size, size);
+            }
+        }
+
+        function drawBreathingSphere() {
+            // Subtle breathing boundary that pulses
+            let breathScale = 1 + sin(breathPhase) * 0.02;
+            let themeRgb = hexToRgb(params.themeColor);
+
+            noFill();
+
+            // Outer breathing ring
+            for (let i = 3; i > 0; i--) {
+                let size = sphereRadius * 2 * breathScale + i * 8;
+                let alpha = 0.04 * (3 - i);
+                stroke(themeRgb.r, themeRgb.g, themeRgb.b, alpha);
+                strokeWeight(2);
+                ellipse(0, 0, size, size);
+            }
+
+            // Inner soft boundary
+            let innerPulse = 1 + sin(breathPhase * 1.5) * 0.03;
+            for (let i = 5; i > 0; i--) {
+                let size = sphereRadius * 1.6 * innerPulse + i * 5;
+                let alpha = 0.02 * (5 - i);
+                stroke(themeRgb.r * 0.8, themeRgb.g * 0.8, themeRgb.b * 1.2, alpha);
+                strokeWeight(1);
+                ellipse(0, 0, size, size);
+            }
+        }
+
+        function drawParticleTrails() {
+            // Draw fading trails for moving particles
+            noStroke();
+
+            // Update and draw trails
+            for (let i = particleTrails.length - 1; i >= 0; i--) {
+                let trail = particleTrails[i];
+                trail.life--;
+
+                if (trail.life <= 0) {
+                    particleTrails.splice(i, 1);
+                    continue;
+                }
+
+                let alpha = (trail.life / trail.maxLife) * 0.3;
+                let size = trail.size * (trail.life / trail.maxLife);
+
+                fill(trail.r, trail.g, trail.b, alpha);
+                ellipse(trail.x, trail.y, size, size);
+            }
         }
 
         function rotatePoint(x, y, z) {
@@ -772,7 +869,11 @@
 
         function drawAmbientParticles() {
             noStroke();
-            for (let p of ambientParticles) {
+            let themeRgb = hexToRgb(params.themeColor);
+
+            for (let i = 0; i < ambientParticles.length; i++) {
+                let p = ambientParticles[i];
+
                 // Slow orbit
                 let angle = time * p.speed;
                 let cosA = cos(angle);
@@ -783,8 +884,27 @@
                 let rotated = rotatePoint(newX, p.y, newZ);
                 let depth = map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1);
 
-                fill(150, 200, 255, p.alpha * depth);
+                // Blend with theme color for cohesive look
+                let r = lerp(150, themeRgb.r, 0.4);
+                let g = lerp(200, themeRgb.g, 0.3);
+                let b = lerp(255, themeRgb.b, 0.2);
+
+                fill(r, g, b, p.alpha * depth);
                 ellipse(rotated.x, rotated.y, p.size * depth, p.size * depth);
+
+                // Add trail for some particles (every 5th particle, occasionally)
+                if (i % 5 === 0 && random() < 0.1 && particleTrails.length < 200) {
+                    particleTrails.push({
+                        x: rotated.x,
+                        y: rotated.y,
+                        r: r,
+                        g: g,
+                        b: b,
+                        size: p.size * depth * 1.5,
+                        life: 30,
+                        maxLife: 30
+                    });
+                }
             }
         }
 
