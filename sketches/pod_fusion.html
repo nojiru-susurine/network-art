@@ -1094,20 +1094,10 @@
                 let blended = blendColors(fx.colors);
                 let col = hexToRgb(blended);
 
-                // Subtle expanding ring - single soft ring
-                noFill();
-                stroke(col.r, col.g, col.b, alpha * 0.15);
-                strokeWeight(1.5);
-                ellipse(fx.x, fx.y, fx.size * 0.8, fx.size * 0.8);
-
-                // Soft glow instead of burst particles
+                // Simple soft glow only
                 noStroke();
                 fill(col.r, col.g, col.b, alpha * 0.1);
-                ellipse(fx.x, fx.y, fx.size * 0.6, fx.size * 0.6);
-
-                // Subtle center glow (no flash)
-                fill(255, 255, 255, alpha * 0.2);
-                ellipse(fx.x, fx.y, 12 * alpha, 12 * alpha);
+                ellipse(fx.x, fx.y, fx.size * 0.5, fx.size * 0.5);
             }
         }
 
@@ -1253,20 +1243,6 @@
                     // Bright center
                     fill(255, 255, 255, alpha * 0.8);
                     ellipse(currentX, currentY, 6, 6);
-                }
-
-                // Separation sparkles
-                if (fx.progress < 0.5) {
-                    let sparkleCount = 6;
-                    for (let s = 0; s < sparkleCount; s++) {
-                        let sparkleAngle = (s / sparkleCount) * TWO_PI + time * 5;
-                        let sparkleDist = (1 - fx.progress * 2) * 30 + 10;
-                        let sx = fx.fromX + cos(sparkleAngle) * sparkleDist;
-                        let sy = fx.fromY + sin(sparkleAngle) * sparkleDist;
-
-                        fill(255, 255, 255, alpha * 0.6 * (1 - fx.progress * 2));
-                        ellipse(sx, sy, 4, 4);
-                    }
                 }
             }
         }
