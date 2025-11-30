@@ -645,9 +645,6 @@
 
             translate(width / 2, height / 2);
 
-            // Draw warm core light at center
-            drawCoreLight();
-
             // Sort pods by z for proper depth rendering
             let sortedPods = [...pods].map((p, i) => ({...p, index: i}));
 
@@ -694,38 +691,6 @@
         // ═══════════════════════════════════════════════════════════════════════
         // Background World Effects
         // ═══════════════════════════════════════════════════════════════════════
-
-        function drawCoreLight() {
-            // Warm glowing core at the center - represents the heart of relationships
-            let themeRgb = hexToRgb(params.themeColor);
-
-            // Breathing pulse effect
-            let breathScale = 1 + sin(breathPhase) * 0.15;
-
-            // Multiple layers of warm glow
-            noStroke();
-            for (let i = 12; i > 0; i--) {
-                let size = sphereRadius * 0.4 * (i / 12) * breathScale;
-                let alpha = 0.03 * (12 - i) / 12;
-
-                // Blend theme color with warm orange/yellow
-                let warmR = lerp(themeRgb.r, 255, 0.3);
-                let warmG = lerp(themeRgb.g, 180, 0.2);
-                let warmB = lerp(themeRgb.b, 100, 0.4);
-
-                fill(warmR, warmG, warmB, alpha);
-                ellipse(0, 0, size, size);
-            }
-
-            // Inner bright core
-            let coreSize = 30 * breathScale;
-            for (let i = 5; i > 0; i--) {
-                let size = coreSize * (i / 5);
-                let alpha = 0.15 * (5 - i) / 5;
-                fill(255, 240, 220, alpha);
-                ellipse(0, 0, size, size);
-            }
-        }
 
         function drawParticleTrails() {
             // Draw fading trails for moving particles
