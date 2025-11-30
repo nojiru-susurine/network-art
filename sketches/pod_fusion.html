@@ -147,6 +147,120 @@
             text-align: right;
         }
 
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-picker-container input[type="color"] {
+            width: 50px;
+            height: 35px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            padding: 0;
+        }
+
+        .color-picker-container input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-picker-container input[type="color"]::-webkit-color-swatch {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+        }
+
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: #64f4d4;
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .palette-preview {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .palette-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .palette-color:hover {
+            transform: scale(1.15);
+        }
+
+        .preset-colors {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .preset-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            border-color: #64f4d4;
+            background: rgba(100, 244, 212, 0.1);
+        }
+
+        .preset-swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .preset-name {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            line-height: 1.2;
+        }
+
         .button {
             background: linear-gradient(135deg, #64f4d4, #7eb8ff);
             color: #0d0d1a;
@@ -257,6 +371,25 @@
             </div>
 
             <div class="control-section">
+                <h3>Theme Color</h3>
+                <div class="control-group">
+                    <label>Presets</label>
+                    <div class="preset-colors" id="preset-colors"></div>
+                </div>
+                <div class="control-group">
+                    <label>Color Harmony</label>
+                    <select id="color-harmony" onchange="updateColorHarmony(this.value)">
+                        <option value="analogous">Analogous (類似色)</option>
+                        <option value="complementary">Complementary (補色)</option>
+                        <option value="triadic">Triadic (三色)</option>
+                        <option value="tetradic">Tetradic (四色)</option>
+                        <option value="monochromatic">Monochromatic (同系色)</option>
+                    </select>
+                </div>
+                <div class="palette-preview" id="palette-preview"></div>
+            </div>
+
+            <div class="control-section">
                 <h3>Sphere</h3>
 
                 <div class="control-group">
@@ -359,7 +492,9 @@
             attractionForce: 0.2,
             podSpeed: 0.2,
             leaveChance: 0.1,
-            colorPalette: ['#ff9de4', '#7eb8ff', '#64f4d4', '#ffd484', '#b088f4', '#ff8a80', '#98f5e1', '#ffc8dd']
+            themeColor: '#ffb7c5',
+            colorHarmony: 'analogous',
+            colorPalette: []
         };
 
         let defaultParams = JSON.parse(JSON.stringify(params));
@@ -1225,6 +1360,216 @@
         }
 
         // ═══════════════════════════════════════════════════════════════════════
+        // Color Presets
+        // ═══════════════════════════════════════════════════════════════════════
+
+        const colorPresets = [
+            { name: 'Sakura', color: '#ffb7c5', harmony: 'analogous' },
+            { name: 'Ocean', color: '#4a90d9', harmony: 'analogous' },
+            { name: 'Sunset', color: '#ff7b54', harmony: 'analogous' },
+            { name: 'Forest', color: '#5cb85c', harmony: 'analogous' },
+            { name: 'Lavender', color: '#b088f4', harmony: 'analogous' },
+            { name: 'Gold', color: '#ffd700', harmony: 'analogous' },
+            { name: 'Coral', color: '#ff6b6b', harmony: 'complementary' },
+            { name: 'Mint', color: '#64f4d4', harmony: 'analogous' }
+        ];
+
+        function renderPresets() {
+            let container = document.getElementById('preset-colors');
+            container.innerHTML = '';
+
+            for (let preset of colorPresets) {
+                let btn = document.createElement('div');
+                btn.className = 'preset-btn';
+                if (params.themeColor === preset.color) {
+                    btn.classList.add('active');
+                }
+                btn.onclick = () => selectPreset(preset);
+
+                let swatch = document.createElement('div');
+                swatch.className = 'preset-swatch';
+                swatch.style.backgroundColor = preset.color;
+
+                let name = document.createElement('div');
+                name.className = 'preset-name';
+                name.textContent = preset.name;
+
+                btn.appendChild(swatch);
+                btn.appendChild(name);
+                container.appendChild(btn);
+            }
+        }
+
+        function selectPreset(preset) {
+            params.themeColor = preset.color;
+            params.colorHarmony = preset.harmony;
+            document.getElementById('color-harmony').value = preset.harmony;
+            params.colorPalette = generatePalette(preset.color, preset.harmony);
+            updatePalettePreview();
+            renderPresets();
+            initializeSystem();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Color Palette Generation
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function hexToHsl(hex) {
+            let rgb = hexToRgb(hex);
+            let r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return { h: h * 360, s: s * 100, l: l * 100 };
+        }
+
+        function hslToHex(h, s, l) {
+            h = ((h % 360) + 360) % 360;
+            s = Math.max(0, Math.min(100, s)) / 100;
+            l = Math.max(0, Math.min(100, l)) / 100;
+
+            let c = (1 - Math.abs(2 * l - 1)) * s;
+            let x = c * (1 - Math.abs((h / 60) % 2 - 1));
+            let m = l - c / 2;
+            let r, g, b;
+
+            if (h < 60) { r = c; g = x; b = 0; }
+            else if (h < 120) { r = x; g = c; b = 0; }
+            else if (h < 180) { r = 0; g = c; b = x; }
+            else if (h < 240) { r = 0; g = x; b = c; }
+            else if (h < 300) { r = x; g = 0; b = c; }
+            else { r = c; g = 0; b = x; }
+
+            r = Math.round((r + m) * 255);
+            g = Math.round((g + m) * 255);
+            b = Math.round((b + m) * 255);
+
+            return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+        }
+
+        function generatePalette(baseColor, harmony) {
+            let hsl = hexToHsl(baseColor);
+            let palette = [];
+
+            switch (harmony) {
+                case 'analogous':
+                    // 類似色: 基準色の両側30度ずつ
+                    palette = [
+                        hslToHex(hsl.h - 30, hsl.s, hsl.l),
+                        hslToHex(hsl.h - 15, hsl.s, hsl.l + 5),
+                        baseColor,
+                        hslToHex(hsl.h + 15, hsl.s, hsl.l + 5),
+                        hslToHex(hsl.h + 30, hsl.s, hsl.l),
+                        hslToHex(hsl.h - 20, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 20, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h, hsl.s - 15, hsl.l + 20)
+                    ];
+                    break;
+
+                case 'complementary':
+                    // 補色: 180度反対側
+                    let comp = (hsl.h + 180) % 360;
+                    palette = [
+                        baseColor,
+                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 10),
+                        hslToHex(hsl.h, hsl.s - 20, hsl.l + 20),
+                        hslToHex(comp, hsl.s, hsl.l),
+                        hslToHex(comp, hsl.s - 10, hsl.l + 10),
+                        hslToHex(comp, hsl.s - 20, hsl.l + 20),
+                        hslToHex(hsl.h + 15, hsl.s, hsl.l),
+                        hslToHex(comp + 15, hsl.s, hsl.l)
+                    ];
+                    break;
+
+                case 'triadic':
+                    // 三色: 120度間隔
+                    palette = [
+                        baseColor,
+                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 120, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 120, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 240, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 240, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 60, hsl.s - 15, hsl.l + 20),
+                        hslToHex(hsl.h + 180, hsl.s - 15, hsl.l + 20)
+                    ];
+                    break;
+
+                case 'tetradic':
+                    // 四色: 90度間隔
+                    palette = [
+                        baseColor,
+                        hslToHex(hsl.h + 90, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 180, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 270, hsl.s, hsl.l),
+                        hslToHex(hsl.h, hsl.s - 15, hsl.l + 15),
+                        hslToHex(hsl.h + 90, hsl.s - 15, hsl.l + 15),
+                        hslToHex(hsl.h + 180, hsl.s - 15, hsl.l + 15),
+                        hslToHex(hsl.h + 270, hsl.s - 15, hsl.l + 15)
+                    ];
+                    break;
+
+                case 'monochromatic':
+                    // 同系色: 彩度と明度のバリエーション
+                    palette = [
+                        hslToHex(hsl.h, hsl.s, hsl.l - 20),
+                        hslToHex(hsl.h, hsl.s - 10, hsl.l - 10),
+                        baseColor,
+                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 10),
+                        hslToHex(hsl.h, hsl.s - 20, hsl.l + 20),
+                        hslToHex(hsl.h, hsl.s + 10, hsl.l),
+                        hslToHex(hsl.h, hsl.s - 30, hsl.l + 25),
+                        hslToHex(hsl.h, hsl.s - 5, hsl.l + 5)
+                    ];
+                    break;
+
+                default:
+                    palette = [baseColor];
+            }
+
+            return palette;
+        }
+
+        function updatePalettePreview() {
+            let preview = document.getElementById('palette-preview');
+            preview.innerHTML = '';
+
+            for (let color of params.colorPalette) {
+                let swatch = document.createElement('div');
+                swatch.className = 'palette-color';
+                swatch.style.backgroundColor = color;
+                swatch.title = color;
+                preview.appendChild(swatch);
+            }
+        }
+
+        function updateThemeColor(color) {
+            params.themeColor = color;
+            document.getElementById('theme-color-value').textContent = color;
+            params.colorPalette = generatePalette(color, params.colorHarmony);
+            updatePalettePreview();
+            initializeSystem();
+        }
+
+        function updateColorHarmony(harmony) {
+            params.colorHarmony = harmony;
+            params.colorPalette = generatePalette(params.themeColor, harmony);
+            updatePalettePreview();
+            initializeSystem();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
         // UI Handlers
         // ═══════════════════════════════════════════════════════════════════════
 
@@ -1284,6 +1629,12 @@
             document.getElementById('leaveChance').value = params.leaveChance;
             document.getElementById('leaveChance-value').textContent = params.leaveChance;
 
+            // Reset theme color
+            document.getElementById('theme-color').value = params.themeColor;
+            document.getElementById('theme-color-value').textContent = params.themeColor;
+            document.getElementById('color-harmony').value = params.colorHarmony;
+            initializeColorSystem();
+
             updateSeedDisplay();
             initializeSystem();
         }
@@ -1292,7 +1643,16 @@
             saveCanvas('pod-fusion-' + params.seed, 'png');
         }
 
-        window.addEventListener('load', updateSeedDisplay);
+        function initializeColorSystem() {
+            params.colorPalette = generatePalette(params.themeColor, params.colorHarmony);
+            updatePalettePreview();
+            renderPresets();
+        }
+
+        window.addEventListener('load', () => {
+            updateSeedDisplay();
+            initializeColorSystem();
+        });
     </script>
 </body>
 </html>
