@@ -1167,7 +1167,7 @@
             for (let i = fusionEffects.length - 1; i >= 0; i--) {
                 let fx = fusionEffects[i];
                 fx.life--;
-                fx.size = lerp(fx.size, fx.maxSize, 0.15);
+                fx.size = lerp(fx.size, fx.maxSize, 0.1);
 
                 if (fx.life <= 0) {
                     fusionEffects.splice(i, 1);
@@ -1178,31 +1178,20 @@
                 let blended = blendColors(fx.colors);
                 let col = hexToRgb(blended);
 
-                // Expanding ring
+                // Subtle expanding ring - single soft ring
                 noFill();
-                for (let r = 3; r > 0; r--) {
-                    stroke(col.r, col.g, col.b, alpha * 0.3 * (r / 3));
-                    strokeWeight(r * 2);
-                    ellipse(fx.x, fx.y, fx.size * (1 - r * 0.1), fx.size * (1 - r * 0.1));
-                }
+                stroke(col.r, col.g, col.b, alpha * 0.15);
+                strokeWeight(1.5);
+                ellipse(fx.x, fx.y, fx.size * 0.8, fx.size * 0.8);
 
-                // Burst particles
+                // Soft glow instead of burst particles
                 noStroke();
-                let particleCount = fx.colors.length * 4;
-                for (let p = 0; p < particleCount; p++) {
-                    let angle = (p / particleCount) * TWO_PI + time * 3;
-                    let dist = fx.size * 0.4 * (1 - fx.life / 40);
-                    let px = fx.x + cos(angle) * dist;
-                    let py = fx.y + sin(angle) * dist;
+                fill(col.r, col.g, col.b, alpha * 0.1);
+                ellipse(fx.x, fx.y, fx.size * 0.6, fx.size * 0.6);
 
-                    let pCol = hexToRgb(fx.colors[p % fx.colors.length]);
-                    fill(pCol.r, pCol.g, pCol.b, alpha * 0.8);
-                    ellipse(px, py, 8 * alpha, 8 * alpha);
-                }
-
-                // Center flash
-                fill(255, 255, 255, alpha * 0.8);
-                ellipse(fx.x, fx.y, 30 * alpha, 30 * alpha);
+                // Subtle center glow (no flash)
+                fill(255, 255, 255, alpha * 0.2);
+                ellipse(fx.x, fx.y, 12 * alpha, 12 * alpha);
             }
         }
 
