@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pod Fusion</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #0d0d1a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: rgba(20, 20, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar h1 {
+            font-family: 'Lora', serif;
+            font-size: 26px;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ff9de4, #7eb8ff, #64f4d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .sidebar .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .control-section { margin-bottom: 28px; }
+
+        .control-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-section h3::before {
+            content: '◉';
+            color: #64f4d4;
+            font-size: 10px;
+        }
+
+        .seed-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #fff;
+        }
+
+        .seed-input:focus {
+            outline: none;
+            border-color: #64f4d4;
+            box-shadow: 0 0 15px rgba(100, 244, 212, 0.2);
+        }
+
+        .seed-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .control-group { margin-bottom: 16px; }
+
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(135deg, #64f4d4, #7eb8ff);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(100, 244, 212, 0.5);
+        }
+
+        .value-display {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #64f4d4, #7eb8ff);
+            color: #0d0d1a;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(100, 244, 212, 0.4);
+        }
+
+        .button.secondary {
+            background: linear-gradient(135deg, #7eb8ff, #b088f4);
+        }
+
+        .button.tertiary {
+            background: linear-gradient(135deg, #ff9de4, #ffd484);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .button-row .button { flex: 1; }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .stat-row:last-child { margin-bottom: 0; }
+
+        .stat-value {
+            color: #64f4d4;
+            font-family: 'Courier New', monospace;
+        }
+
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        #canvas-container {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(100, 244, 212, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 100px;
+        }
+
+        @media (max-width: 700px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Pod Fusion</h1>
+            <div class="subtitle">1つのPodが出会い、融合し、新しいPodとなって連鎖的に成長する</div>
+
+            <div class="control-section">
+                <h3>Seed</h3>
+                <input type="number" id="seed-input" class="seed-input" value="42" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← Prev</button>
+                    <button class="button secondary" onclick="nextSeed()">Next →</button>
+                </div>
+                <button class="button tertiary" onclick="randomSeedAndUpdate()">◉ Random</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Sphere</h3>
+
+                <div class="control-group">
+                    <label>Initial Pods</label>
+                    <div class="slider-container">
+                        <input type="range" id="initialPods" min="100" max="500" step="20" value="200" oninput="updateParam('initialPods', this.value)">
+                        <span class="value-display" id="initialPods-value">200</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Sphere Rotation</label>
+                    <div class="slider-container">
+                        <input type="range" id="rotationSpeed" min="0.02" max="0.3" step="0.02" value="0.1" oninput="updateParam('rotationSpeed', this.value)">
+                        <span class="value-display" id="rotationSpeed-value">0.1</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Fusion Distance</label>
+                    <div class="slider-container">
+                        <input type="range" id="fusionDistance" min="5" max="25" step="1" value="10" oninput="updateParam('fusionDistance', this.value)">
+                        <span class="value-display" id="fusionDistance-value">10</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Attraction Force</label>
+                    <div class="slider-container">
+                        <input type="range" id="attractionForce" min="0.05" max="0.5" step="0.05" value="0.2" oninput="updateParam('attractionForce', this.value)">
+                        <span class="value-display" id="attractionForce-value">0.2</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Pod Speed</label>
+                    <div class="slider-container">
+                        <input type="range" id="podSpeed" min="0.1" max="0.8" step="0.05" value="0.3" oninput="updateParam('podSpeed', this.value)">
+                        <span class="value-display" id="podSpeed-value">0.3</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Leave Chance</label>
+                    <div class="slider-container">
+                        <input type="range" id="leaveChance" min="0.02" max="0.2" step="0.02" value="0.1" oninput="updateParam('leaveChance', this.value)">
+                        <span class="value-display" id="leaveChance-value">0.1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Statistics</h3>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Active Pods</span>
+                        <span class="stat-value" id="stat-pods">12</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Total Fusions</span>
+                        <span class="stat-value" id="stat-fusions">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Largest Pod</span>
+                        <span class="stat-value" id="stat-largest">1</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Total Leaves</span>
+                        <span class="stat-value" id="stat-leaves">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Actions</h3>
+                <div class="button-row">
+                    <button class="button" onclick="resetParameters()">Reset</button>
+                    <button class="button secondary" onclick="downloadImage()">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">◉ Initializing Pod Universe...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // POD FUSION - Pods merging in a 3D sphere
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let params = {
+            seed: 42,
+            initialPods: 200,
+            rotationSpeed: 0.1,
+            fusionDistance: 10,
+            attractionForce: 0.2,
+            podSpeed: 0.3,
+            leaveChance: 0.1,
+            colorPalette: ['#ff9de4', '#7eb8ff', '#64f4d4', '#ffd484', '#b088f4', '#ff8a80', '#98f5e1', '#ffc8dd']
+        };
+
+        let defaultParams = JSON.parse(JSON.stringify(params));
+
+        // System
+        let pods = [];
+        let fusionEffects = [];
+        let leaveEffects = [];
+        let energyBridges = [];
+        let ambientParticles = [];
+        let sphereRadius = 300;
+        let rotationX = 0;
+        let rotationY = 0;
+        let time = 0;
+        let totalFusions = 0;
+        let totalLeaves = 0;
+
+        function setup() {
+            let canvas = createCanvas(900, 900);
+            canvas.parent('canvas-container');
+            colorMode(RGB, 255, 255, 255, 1);
+            initializeSystem();
+            document.querySelector('.loading').style.display = 'none';
+        }
+
+        function initializeSystem() {
+            randomSeed(params.seed);
+            noiseSeed(params.seed);
+
+            pods = [];
+            fusionEffects = [];
+            leaveEffects = [];
+            energyBridges = [];
+            ambientParticles = [];
+            totalFusions = 0;
+            totalLeaves = 0;
+            time = 0;
+
+            sphereRadius = min(width, height) * 0.32;
+
+            // Create initial pods distributed throughout 3D sphere volume
+            for (let i = 0; i < params.initialPods; i++) {
+                // Distribute throughout the sphere volume, not just surface
+                let r = random(sphereRadius * 0.2, sphereRadius * 0.85);
+                let theta = random(TWO_PI);
+                let phi = acos(2 * random() - 1); // Uniform distribution on sphere
+
+                let initPos = {
+                    x: r * sin(phi) * cos(theta),
+                    y: r * sin(phi) * sin(theta),
+                    z: r * cos(phi)
+                };
+                createPod(initPos, null);
+            }
+
+            // Create ambient particles inside sphere
+            for (let i = 0; i < 400; i++) {
+                let r = random(sphereRadius * 0.3, sphereRadius * 0.95);
+                let theta = random(TWO_PI);
+                let phi = random(PI);
+
+                ambientParticles.push({
+                    x: r * sin(phi) * cos(theta),
+                    y: r * sin(phi) * sin(theta),
+                    z: r * cos(phi),
+                    size: random(1, 2.5),
+                    alpha: random(0.2, 0.5),
+                    speed: random(0.002, 0.006)
+                });
+            }
+
+            updateStats();
+        }
+
+        function createPod(position, colors) {
+            let x, y, z;
+
+            if (position) {
+                x = position.x;
+                y = position.y;
+                z = position.z;
+            } else {
+                // Random position on sphere surface
+                let theta = random(TWO_PI);
+                let phi = random(PI);
+                let r = sphereRadius * random(0.4, 0.9);
+                x = r * sin(phi) * cos(theta);
+                y = r * sin(phi) * sin(theta);
+                z = r * cos(phi);
+            }
+
+            let podColors;
+            if (colors) {
+                podColors = colors;
+            } else {
+                let colorIndex = floor(random(params.colorPalette.length));
+                podColors = [params.colorPalette[colorIndex]];
+            }
+
+            // Velocity tangent to sphere
+            let toCenter = createVector(-x, -y, -z).normalize();
+            let randomDir = createVector(random(-1, 1), random(-1, 1), random(-1, 1)).normalize();
+            let velocity = toCenter.cross(randomDir).normalize().mult(random(0.3, 0.8));
+
+            pods.push({
+                x: x,
+                y: y,
+                z: z,
+                vx: velocity.x,
+                vy: velocity.y,
+                vz: velocity.z,
+                colors: podColors,
+                memberCount: colors ? colors.length : 1,
+                size: 12 + (colors ? colors.length * 5 : 0),
+                phase: random(TWO_PI),
+                pulseSpeed: random(0.03, 0.06),
+                targetPod: null,
+                attracting: false
+            });
+        }
+
+        function draw() {
+            // Background
+            background(13, 13, 26);
+
+            time += 0.016;
+
+            // Rotate sphere view - more dynamic rotation
+            rotationY += 0.004 * params.rotationSpeed;
+            rotationX = sin(time * 0.15) * 0.25 + 0.2; // Tilted view with oscillation
+
+            translate(width / 2, height / 2);
+
+            // Draw sphere structure (disabled)
+            // drawSphereStructure();
+
+            // Sort pods by z for proper depth rendering
+            let sortedPods = [...pods].map((p, i) => ({...p, index: i}));
+
+            // Apply rotation to get screen positions
+            for (let p of sortedPods) {
+                let rotated = rotatePoint(p.x, p.y, p.z);
+                p.screenX = rotated.x;
+                p.screenY = rotated.y;
+                p.screenZ = rotated.z;
+            }
+
+            sortedPods.sort((a, b) => a.screenZ - b.screenZ);
+
+            // Update physics
+            updatePods();
+
+            // Draw ambient particles
+            drawAmbientParticles();
+
+            // Draw energy bridges
+            drawEnergyBridges();
+
+            // Draw pods (back to front)
+            for (let p of sortedPods) {
+                drawPod(p);
+            }
+
+            // Draw fusion effects
+            drawFusionEffects();
+
+            // Draw leave effects
+            drawLeaveEffects();
+
+            // Check for fusions
+            checkFusions();
+
+            // Check for leaves
+            checkLeaves();
+
+            updateStats();
+        }
+
+        function rotatePoint(x, y, z) {
+            // Rotate around Y axis
+            let cosY = cos(rotationY);
+            let sinY = sin(rotationY);
+            let x1 = x * cosY - z * sinY;
+            let z1 = x * sinY + z * cosY;
+
+            // Rotate around X axis
+            let cosX = cos(rotationX);
+            let sinX = sin(rotationX);
+            let y1 = y * cosX - z1 * sinX;
+            let z2 = y * sinX + z1 * cosX;
+
+            return { x: x1, y: y1, z: z2 };
+        }
+
+        function drawSphereStructure() {
+            // Enhanced 3D sphere with depth shading
+
+            // Inner ambient glow
+            for (let i = 8; i > 0; i--) {
+                let size = sphereRadius * 2 * (0.3 + i * 0.08);
+                let alpha = 0.015 * (8 - i);
+                fill(80, 150, 255, alpha);
+                noStroke();
+                ellipse(0, 0, size, size);
+            }
+
+            // Draw sphere wireframe with enhanced depth
+            noFill();
+
+            // Latitude lines - more of them for better 3D feel
+            for (let lat = -4; lat <= 4; lat++) {
+                let phi = PI / 2 + lat * 0.22;
+                let r = sphereRadius * sin(phi);
+                let yPos = sphereRadius * cos(phi);
+
+                beginShape();
+                for (let i = 0; i <= 80; i++) {
+                    let theta = (i / 80) * TWO_PI;
+                    let x = r * cos(theta);
+                    let z = r * sin(theta);
+                    let rotated = rotatePoint(x, yPos, z);
+
+                    // Stronger depth effect
+                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25);
+                    let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
+                    stroke(brightness, brightness + 40, 255, depthFactor);
+                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.5, 2));
+                    vertex(rotated.x, rotated.y);
+                }
+                endShape();
+            }
+
+            // Longitude lines - more of them
+            for (let lon = 0; lon < 16; lon++) {
+                let theta = (lon / 16) * TWO_PI;
+
+                beginShape();
+                for (let i = 0; i <= 60; i++) {
+                    let phi = (i / 60) * PI;
+                    let x = sphereRadius * sin(phi) * cos(theta);
+                    let y = sphereRadius * cos(phi);
+                    let z = sphereRadius * sin(phi) * sin(theta);
+                    let rotated = rotatePoint(x, y, z);
+
+                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25);
+                    let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
+                    stroke(brightness, brightness + 40, 255, depthFactor);
+                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.5, 2));
+                    vertex(rotated.x, rotated.y);
+                }
+                endShape();
+            }
+
+            // Outer rim glow - stronger 3D edge
+            for (let i = 8; i > 0; i--) {
+                noFill();
+                stroke(120, 180, 255, 0.04 * i);
+                strokeWeight(i * 2.5);
+                ellipse(0, 0, sphereRadius * 2.02, sphereRadius * 2.02);
+            }
+
+            // Highlight on front of sphere (3D lighting effect)
+            let highlightX = -sphereRadius * 0.3;
+            let highlightY = -sphereRadius * 0.3;
+            for (let i = 5; i > 0; i--) {
+                fill(200, 230, 255, 0.02 * (5 - i));
+                noStroke();
+                ellipse(highlightX, highlightY, sphereRadius * 0.5 * i / 5, sphereRadius * 0.5 * i / 5);
+            }
+        }
+
+        function drawAmbientParticles() {
+            noStroke();
+            for (let p of ambientParticles) {
+                // Slow orbit
+                let angle = time * p.speed;
+                let cosA = cos(angle);
+                let sinA = sin(angle);
+                let newX = p.x * cosA - p.z * sinA;
+                let newZ = p.x * sinA + p.z * cosA;
+
+                let rotated = rotatePoint(newX, p.y, newZ);
+                let depth = map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1);
+
+                fill(150, 200, 255, p.alpha * depth);
+                ellipse(rotated.x, rotated.y, p.size * depth, p.size * depth);
+            }
+        }
+
+        function updatePods() {
+            for (let i = 0; i < pods.length; i++) {
+                let pod = pods[i];
+
+                // Update immunity timer for pods that just left
+                if (pod.immunityTimer && pod.immunityTimer > 0) {
+                    pod.immunityTimer--;
+                    if (pod.immunityTimer <= 0) {
+                        pod.justLeft = false;
+                    }
+                }
+
+                // Find nearest pod for attraction
+                let nearestDist = Infinity;
+                let nearestPod = null;
+
+                for (let j = 0; j < pods.length; j++) {
+                    if (i === j) continue;
+                    let other = pods[j];
+                    let d = dist3D(pod, other);
+
+                    if (d < nearestDist && d < 200) {
+                        nearestDist = d;
+                        nearestPod = other;
+                    }
+                }
+
+                // Attraction to nearest pod
+                if (nearestPod && nearestDist < 180) {
+                    let attraction = params.attractionForce * 0.02;
+                    // Stronger attraction for larger pods (chain reaction)
+                    attraction *= (1 + pod.memberCount * 0.15);
+
+                    pod.vx += (nearestPod.x - pod.x) * attraction / nearestDist;
+                    pod.vy += (nearestPod.y - pod.y) * attraction / nearestDist;
+                    pod.vz += (nearestPod.z - pod.z) * attraction / nearestDist;
+
+                    pod.attracting = true;
+                    pod.targetPod = nearestPod;
+
+                    // Create energy bridge
+                    if (nearestDist < 100 && random() < 0.12) {
+                        energyBridges.push({
+                            from: pod,
+                            to: nearestPod,
+                            progress: 0,
+                            life: 30
+                        });
+                    }
+                } else {
+                    pod.attracting = false;
+                    pod.targetPod = null;
+                }
+
+                // ═══════════════════════════════════════════════════════════════
+                // DYNAMIC 3D MOVEMENT - More Z-axis motion
+                // ═══════════════════════════════════════════════════════════════
+
+                // Add 3D noise-based wandering for more dynamic movement
+                let noiseScale = 0.008;
+                let noiseTime = time * 0.5;
+                let wanderStrength = 0.08 * params.podSpeed;
+
+                // 3D Perlin noise for organic wandering in all directions
+                let wanderX = (noise(pod.x * noiseScale, pod.y * noiseScale, noiseTime) - 0.5) * wanderStrength;
+                let wanderY = (noise(pod.y * noiseScale, pod.z * noiseScale, noiseTime + 100) - 0.5) * wanderStrength;
+                let wanderZ = (noise(pod.z * noiseScale, pod.x * noiseScale, noiseTime + 200) - 0.5) * wanderStrength;
+
+                // Extra Z-axis impulse for dramatic front-back movement
+                let zImpulse = sin(time * 0.8 + pod.phase * 2) * 0.03 * params.podSpeed;
+                wanderZ += zImpulse;
+
+                pod.vx += wanderX;
+                pod.vy += wanderY;
+                pod.vz += wanderZ;
+
+                // Occasional random burst in Z direction
+                if (random() < 0.005) {
+                    pod.vz += (random() - 0.5) * 1.5;
+                }
+
+                // Keep pods inside sphere with soft boundary
+                let distFromCenter = sqrt(pod.x * pod.x + pod.y * pod.y + pod.z * pod.z);
+                if (distFromCenter > sphereRadius * 0.88) {
+                    let pushBack = 0.04;
+                    pod.vx -= pod.x / distFromCenter * pushBack;
+                    pod.vy -= pod.y / distFromCenter * pushBack;
+                    pod.vz -= pod.z / distFromCenter * pushBack;
+                }
+
+                // Prevent pods from getting too close to center
+                if (distFromCenter < sphereRadius * 0.15) {
+                    let pushOut = 0.03;
+                    pod.vx += pod.x / distFromCenter * pushOut;
+                    pod.vy += pod.y / distFromCenter * pushOut;
+                    pod.vz += pod.z / distFromCenter * pushOut;
+                }
+
+                // Apply velocity with less damping for more dynamic movement
+                pod.vx *= 0.96;
+                pod.vy *= 0.96;
+                pod.vz *= 0.96;
+
+                // Higher max speed for more dynamic movement
+                let speed = sqrt(pod.vx * pod.vx + pod.vy * pod.vy + pod.vz * pod.vz);
+                let maxSpeed = 3.5 * params.podSpeed;
+                if (speed > maxSpeed) {
+                    pod.vx = (pod.vx / speed) * maxSpeed;
+                    pod.vy = (pod.vy / speed) * maxSpeed;
+                    pod.vz = (pod.vz / speed) * maxSpeed;
+                }
+
+                pod.x += pod.vx * params.podSpeed;
+                pod.y += pod.vy * params.podSpeed;
+                pod.z += pod.vz * params.podSpeed;
+
+                pod.phase += pod.pulseSpeed;
+            }
+        }
+
+        function drawEnergyBridges() {
+            for (let i = energyBridges.length - 1; i >= 0; i--) {
+                let bridge = energyBridges[i];
+                bridge.progress += 0.08;
+                bridge.life--;
+
+                if (bridge.life <= 0) {
+                    energyBridges.splice(i, 1);
+                    continue;
+                }
+
+                let fromRot = rotatePoint(bridge.from.x, bridge.from.y, bridge.from.z);
+                let toRot = rotatePoint(bridge.to.x, bridge.to.y, bridge.to.z);
+
+                let alpha = (bridge.life / 30) * 0.6;
+
+                // Gradient line
+                let steps = 20;
+                for (let s = 0; s < steps; s++) {
+                    let t = s / steps;
+                    let x = lerp(fromRot.x, toRot.x, t);
+                    let y = lerp(fromRot.y, toRot.y, t);
+
+                    let col1 = hexToRgb(bridge.from.colors[0]);
+                    let col2 = hexToRgb(bridge.to.colors[0]);
+
+                    let r = lerp(col1.r, col2.r, t);
+                    let g = lerp(col1.g, col2.g, t);
+                    let b = lerp(col1.b, col2.b, t);
+
+                    let wave = sin(t * PI * 4 + time * 10) * 0.3 + 0.7;
+                    fill(r, g, b, alpha * wave);
+                    noStroke();
+                    ellipse(x, y, 4, 4);
+                }
+
+                // Traveling particle
+                let particleT = (bridge.progress % 1);
+                let px = lerp(fromRot.x, toRot.x, particleT);
+                let py = lerp(fromRot.y, toRot.y, particleT);
+
+                fill(255, 255, 255, alpha);
+                ellipse(px, py, 8, 8);
+            }
+        }
+
+        function drawPod(pod) {
+            // Use rotated screen coordinates
+            let screenX = pod.screenX;
+            let screenY = pod.screenY;
+            let screenZ = pod.screenZ;
+
+            // Depth-based scaling for 3D effect
+            let depthScale = map(screenZ, -sphereRadius, sphereRadius, 0.5, 1.3);
+            let depthAlpha = map(screenZ, -sphereRadius, sphereRadius, 0.4, 1.0);
+
+            let size = pod.size * depthScale;
+
+            // Pulse animation
+            let pulse = sin(pod.phase) * 0.1 + 1;
+            size *= pulse;
+
+            // Get blended color for multi-member pods
+            let blendedColor = blendColors(pod.colors);
+            let col = hexToRgb(blendedColor);
+
+            noStroke();
+
+            // Outer glow
+            let glowLayers = 4 + min(pod.memberCount, 4);
+            for (let i = glowLayers; i > 0; i--) {
+                let glowSize = size * (1 + i * 0.35);
+                let alpha = (1 - i / glowLayers) * 0.12 * depthAlpha;
+                if (pod.attracting) alpha *= 1.5;
+                fill(col.r, col.g, col.b, alpha);
+                ellipse(screenX, screenY, glowSize, glowSize);
+            }
+
+            // Core with gradient (show member colors)
+            if (pod.colors.length > 1) {
+                // Multi-color pie segments for fused pods
+                let segments = min(pod.colors.length, 6);
+                for (let s = 0; s < segments; s++) {
+                    let angle1 = (s / segments) * TWO_PI - PI / 2;
+                    let angle2 = ((s + 1) / segments) * TWO_PI - PI / 2;
+
+                    let segCol = hexToRgb(pod.colors[s % pod.colors.length]);
+
+                    fill(segCol.r, segCol.g, segCol.b, 0.9 * depthAlpha);
+                    arc(screenX, screenY, size, size, angle1, angle2, PIE);
+                }
+
+                // Blend overlay for smooth look
+                fill(col.r, col.g, col.b, 0.3 * depthAlpha);
+                ellipse(screenX, screenY, size * 0.8, size * 0.8);
+            } else {
+                // Single color core
+                fill(col.r, col.g, col.b, 0.95 * depthAlpha);
+                ellipse(screenX, screenY, size, size);
+            }
+
+            // Inner bright core
+            fill(255, 255, 255, 0.5 * depthAlpha);
+            ellipse(screenX, screenY, size * 0.2, size * 0.2);
+
+            // Orbiting particles for larger pods
+            if (pod.memberCount >= 3) {
+                let orbitCount = min(pod.memberCount, 5);
+                let orbitRadius = size * 0.65;
+
+                for (let o = 0; o < orbitCount; o++) {
+                    let orbitAngle = time * 1.5 + (o / orbitCount) * TWO_PI;
+                    let orbX = screenX + cos(orbitAngle) * orbitRadius;
+                    let orbY = screenY + sin(orbitAngle) * orbitRadius;
+
+                    let orbCol = hexToRgb(pod.colors[o % pod.colors.length]);
+                    fill(orbCol.r, orbCol.g, orbCol.b, 0.8 * depthAlpha);
+                    ellipse(orbX, orbY, 5 * depthScale, 5 * depthScale);
+                }
+            }
+        }
+
+        function checkFusions() {
+            for (let i = 0; i < pods.length; i++) {
+                for (let j = i + 1; j < pods.length; j++) {
+                    let podA = pods[i];
+                    let podB = pods[j];
+                    let d = dist3D(podA, podB);
+
+                    if (d < params.fusionDistance) {
+                        // Check immunity - recently left pods can't immediately rejoin
+                        if (podA.justLeft || podB.justLeft) continue;
+
+                        // FUSION!
+                        fusePods(i, j);
+                        return; // Only one fusion per frame
+                    }
+                }
+            }
+        }
+
+        function fusePods(indexA, indexB) {
+            let podA = pods[indexA];
+            let podB = pods[indexB];
+
+            // New position (weighted average by member count)
+            let totalMembers = podA.memberCount + podB.memberCount;
+            let newX = (podA.x * podA.memberCount + podB.x * podB.memberCount) / totalMembers;
+            let newY = (podA.y * podA.memberCount + podB.y * podB.memberCount) / totalMembers;
+            let newZ = (podA.z * podA.memberCount + podB.z * podB.memberCount) / totalMembers;
+
+            // Combine colors (keep history)
+            let newColors = [...podA.colors, ...podB.colors];
+            if (newColors.length > 6) {
+                // Keep most recent colors if too many
+                newColors = newColors.slice(-6);
+            }
+
+            // Create fusion effect
+            let rotatedA = rotatePoint(podA.x, podA.y, podA.z);
+            let rotatedB = rotatePoint(podB.x, podB.y, podB.z);
+            let rotatedNew = rotatePoint(newX, newY, newZ);
+
+            fusionEffects.push({
+                x: rotatedNew.x,
+                y: rotatedNew.y,
+                size: 0,
+                maxSize: 150 + totalMembers * 20,
+                colors: newColors,
+                life: 40
+            });
+
+            // Remove old pods
+            pods.splice(Math.max(indexA, indexB), 1);
+            pods.splice(Math.min(indexA, indexB), 1);
+
+            // Create new fused pod
+            pods.push({
+                x: newX,
+                y: newY,
+                z: newZ,
+                vx: (podA.vx + podB.vx) * 0.5,
+                vy: (podA.vy + podB.vy) * 0.5,
+                vz: (podA.vz + podB.vz) * 0.5,
+                colors: newColors,
+                memberCount: totalMembers,
+                size: 12 + totalMembers * 5,
+                phase: 0,
+                pulseSpeed: random(0.03, 0.06),
+                targetPod: null,
+                attracting: false
+            });
+
+            totalFusions++;
+
+            // Spawn new single pods occasionally to keep the chain going
+            if (pods.length < 4 || (random() < 0.3 && pods.length < params.initialPods)) {
+                setTimeout(() => {
+                    if (pods.length < params.initialPods) {
+                        createPod(null, null);
+                    }
+                }, 500);
+            }
+        }
+
+        function drawFusionEffects() {
+            for (let i = fusionEffects.length - 1; i >= 0; i--) {
+                let fx = fusionEffects[i];
+                fx.life--;
+                fx.size = lerp(fx.size, fx.maxSize, 0.15);
+
+                if (fx.life <= 0) {
+                    fusionEffects.splice(i, 1);
+                    continue;
+                }
+
+                let alpha = fx.life / 40;
+                let blended = blendColors(fx.colors);
+                let col = hexToRgb(blended);
+
+                // Expanding ring
+                noFill();
+                for (let r = 3; r > 0; r--) {
+                    stroke(col.r, col.g, col.b, alpha * 0.3 * (r / 3));
+                    strokeWeight(r * 2);
+                    ellipse(fx.x, fx.y, fx.size * (1 - r * 0.1), fx.size * (1 - r * 0.1));
+                }
+
+                // Burst particles
+                noStroke();
+                let particleCount = fx.colors.length * 4;
+                for (let p = 0; p < particleCount; p++) {
+                    let angle = (p / particleCount) * TWO_PI + time * 3;
+                    let dist = fx.size * 0.4 * (1 - fx.life / 40);
+                    let px = fx.x + cos(angle) * dist;
+                    let py = fx.y + sin(angle) * dist;
+
+                    let pCol = hexToRgb(fx.colors[p % fx.colors.length]);
+                    fill(pCol.r, pCol.g, pCol.b, alpha * 0.8);
+                    ellipse(px, py, 8 * alpha, 8 * alpha);
+                }
+
+                // Center flash
+                fill(255, 255, 255, alpha * 0.8);
+                ellipse(fx.x, fx.y, 30 * alpha, 30 * alpha);
+            }
+        }
+
+        function checkLeaves() {
+            for (let i = pods.length - 1; i >= 0; i--) {
+                let pod = pods[i];
+
+                // Only composite pods (2+ members) can have someone leave
+                if (pod.memberCount < 2) continue;
+
+                // Chance of leaving increases with pod size
+                let leaveProb = params.leaveChance * (1 + (pod.memberCount - 2) * 0.3);
+
+                if (random() < leaveProb) {
+                    leavePod(i);
+                    return; // Only one leave per frame
+                }
+            }
+        }
+
+        function leavePod(podIndex) {
+            let pod = pods[podIndex];
+
+            // Pick a random color to leave with
+            let leaveColorIndex = floor(random(pod.colors.length));
+            let leaveColor = pod.colors[leaveColorIndex];
+
+            // Remove that color from the pod
+            pod.colors.splice(leaveColorIndex, 1);
+            pod.memberCount--;
+            pod.size = 12 + pod.memberCount * 5;
+
+            // Calculate leave direction (outward from pod)
+            let leaveAngle = random(TWO_PI);
+            let leavePhi = random(PI);
+            let leaveDir = {
+                x: sin(leavePhi) * cos(leaveAngle),
+                y: sin(leavePhi) * sin(leaveAngle),
+                z: cos(leavePhi)
+            };
+
+            // New position slightly offset from parent pod
+            let offsetDist = pod.size + 30;
+            let newX = pod.x + leaveDir.x * offsetDist;
+            let newY = pod.y + leaveDir.y * offsetDist;
+            let newZ = pod.z + leaveDir.z * offsetDist;
+
+            // Keep within sphere bounds
+            let distFromCenter = sqrt(newX * newX + newY * newY + newZ * newZ);
+            if (distFromCenter > sphereRadius * 0.85) {
+                let scale = (sphereRadius * 0.8) / distFromCenter;
+                newX *= scale;
+                newY *= scale;
+                newZ *= scale;
+            }
+
+            // Create leave effect
+            let rotatedPod = rotatePoint(pod.x, pod.y, pod.z);
+            let rotatedNew = rotatePoint(newX, newY, newZ);
+
+            leaveEffects.push({
+                fromX: rotatedPod.x,
+                fromY: rotatedPod.y,
+                toX: rotatedNew.x,
+                toY: rotatedNew.y,
+                color: leaveColor,
+                progress: 0,
+                life: 50
+            });
+
+            // Create the new independent pod
+            pods.push({
+                x: newX,
+                y: newY,
+                z: newZ,
+                vx: leaveDir.x * 1.5,
+                vy: leaveDir.y * 1.5,
+                vz: leaveDir.z * 1.5,
+                colors: [leaveColor],
+                memberCount: 1,
+                size: 12,
+                phase: random(TWO_PI),
+                pulseSpeed: random(0.03, 0.06),
+                targetPod: null,
+                attracting: false,
+                justLeft: true,  // Immunity period
+                immunityTimer: 90  // Frames of immunity from rejoining
+            });
+
+            totalLeaves++;
+
+            // If original pod is now empty (shouldn't happen but safety check)
+            if (pod.memberCount <= 0) {
+                pods.splice(podIndex, 1);
+            }
+        }
+
+        function drawLeaveEffects() {
+            for (let i = leaveEffects.length - 1; i >= 0; i--) {
+                let fx = leaveEffects[i];
+                fx.progress += 0.04;
+                fx.life--;
+
+                if (fx.life <= 0) {
+                    leaveEffects.splice(i, 1);
+                    continue;
+                }
+
+                let alpha = fx.life / 50;
+                let col = hexToRgb(fx.color);
+
+                // Trail from parent to new position
+                let currentX = lerp(fx.fromX, fx.toX, min(fx.progress, 1));
+                let currentY = lerp(fx.fromY, fx.toY, min(fx.progress, 1));
+
+                // Fading trail
+                let trailSteps = 15;
+                for (let t = 0; t < trailSteps; t++) {
+                    let trailProgress = max(0, fx.progress - t * 0.05);
+                    if (trailProgress <= 0) continue;
+
+                    let tx = lerp(fx.fromX, fx.toX, min(trailProgress, 1));
+                    let ty = lerp(fx.fromY, fx.toY, min(trailProgress, 1));
+                    let trailAlpha = alpha * (1 - t / trailSteps) * 0.6;
+
+                    fill(col.r, col.g, col.b, trailAlpha);
+                    noStroke();
+                    ellipse(tx, ty, 8 - t * 0.4, 8 - t * 0.4);
+                }
+
+                // Main leaving particle
+                if (fx.progress <= 1) {
+                    // Glow
+                    for (let g = 4; g > 0; g--) {
+                        fill(col.r, col.g, col.b, alpha * 0.2 * (1 - g / 4));
+                        ellipse(currentX, currentY, 20 + g * 8, 20 + g * 8);
+                    }
+
+                    // Core
+                    fill(col.r, col.g, col.b, alpha * 0.9);
+                    ellipse(currentX, currentY, 16, 16);
+
+                    // Bright center
+                    fill(255, 255, 255, alpha * 0.8);
+                    ellipse(currentX, currentY, 6, 6);
+                }
+
+                // Separation sparkles
+                if (fx.progress < 0.5) {
+                    let sparkleCount = 6;
+                    for (let s = 0; s < sparkleCount; s++) {
+                        let sparkleAngle = (s / sparkleCount) * TWO_PI + time * 5;
+                        let sparkleDist = (1 - fx.progress * 2) * 30 + 10;
+                        let sx = fx.fromX + cos(sparkleAngle) * sparkleDist;
+                        let sy = fx.fromY + sin(sparkleAngle) * sparkleDist;
+
+                        fill(255, 255, 255, alpha * 0.6 * (1 - fx.progress * 2));
+                        ellipse(sx, sy, 4, 4);
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Utility Functions
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function dist3D(a, b) {
+            return sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2);
+        }
+
+        function hexToRgb(hex) {
+            let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 255, g: 255, b: 255 };
+        }
+
+        function blendColors(colors) {
+            if (colors.length === 1) return colors[0];
+
+            let r = 0, g = 0, b = 0;
+            for (let c of colors) {
+                let rgb = hexToRgb(c);
+                r += rgb.r;
+                g += rgb.g;
+                b += rgb.b;
+            }
+
+            r = Math.round(r / colors.length);
+            g = Math.round(g / colors.length);
+            b = Math.round(b / colors.length);
+
+            return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('stat-pods').textContent = pods.length;
+            document.getElementById('stat-fusions').textContent = totalFusions;
+            document.getElementById('stat-leaves').textContent = totalLeaves;
+
+            let largest = 1;
+            for (let p of pods) {
+                if (p.memberCount > largest) largest = p.memberCount;
+            }
+            document.getElementById('stat-largest').textContent = largest;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI Handlers
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateParam(paramName, value) {
+            params[paramName] = parseFloat(value);
+            document.getElementById(paramName + '-value').textContent = value;
+            if (paramName === 'initialPods') {
+                initializeSystem();
+            }
+        }
+
+        function updateSeedDisplay() {
+            document.getElementById('seed-input').value = params.seed;
+        }
+
+        function updateSeed() {
+            let newSeed = parseInt(document.getElementById('seed-input').value);
+            if (newSeed && newSeed > 0) {
+                params.seed = newSeed;
+                initializeSystem();
+            } else {
+                updateSeedDisplay();
+            }
+        }
+
+        function previousSeed() {
+            params.seed = Math.max(1, params.seed - 1);
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function nextSeed() {
+            params.seed++;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function randomSeedAndUpdate() {
+            params.seed = Math.floor(Math.random() * 999999) + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function resetParameters() {
+            params = JSON.parse(JSON.stringify(defaultParams));
+
+            document.getElementById('initialPods').value = params.initialPods;
+            document.getElementById('initialPods-value').textContent = params.initialPods;
+            document.getElementById('rotationSpeed').value = params.rotationSpeed;
+            document.getElementById('rotationSpeed-value').textContent = params.rotationSpeed;
+            document.getElementById('fusionDistance').value = params.fusionDistance;
+            document.getElementById('fusionDistance-value').textContent = params.fusionDistance;
+            document.getElementById('attractionForce').value = params.attractionForce;
+            document.getElementById('attractionForce-value').textContent = params.attractionForce;
+            document.getElementById('podSpeed').value = params.podSpeed;
+            document.getElementById('podSpeed-value').textContent = params.podSpeed;
+            document.getElementById('leaveChance').value = params.leaveChance;
+            document.getElementById('leaveChance-value').textContent = params.leaveChance;
+
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function downloadImage() {
+            saveCanvas('pod-fusion-' + params.seed, 'png');
+        }
+
+        window.addEventListener('load', updateSeedDisplay);
+    </script>
+</body>
+</html>

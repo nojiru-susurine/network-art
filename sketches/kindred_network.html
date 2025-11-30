@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindred Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+            --anthropic-mid-gray: #b0aea5;
+            --anthropic-light-gray: #e8e6dc;
+            --anthropic-orange: #d97757;
+            --anthropic-blue: #6a9bcc;
+            --anthropic-green: #788c5d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--anthropic-light) 0%, #f5f3ee 100%);
+            min-height: 100vh;
+            color: var(--anthropic-dark);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(20, 20, 19, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar h1 {
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .sidebar .subtitle {
+            color: var(--anthropic-mid-gray);
+            font-size: 14px;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        .control-section {
+            margin-bottom: 32px;
+        }
+
+        .control-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--anthropic-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-section h3::before {
+            content: '•';
+            color: var(--anthropic-orange);
+            font-weight: bold;
+        }
+
+        .seed-input {
+            width: 100%;
+            background: var(--anthropic-light);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--anthropic-light-gray);
+            text-align: center;
+        }
+
+        .seed-input:focus {
+            outline: none;
+            border-color: var(--anthropic-orange);
+            box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.1);
+            background: white;
+        }
+
+        .seed-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .regen-button {
+            margin-bottom: 0;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: var(--anthropic-light-gray);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #c86641;
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .value-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .color-group {
+            margin-bottom: 16px;
+        }
+
+        .color-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            margin-bottom: 4px;
+        }
+
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-picker-container input[type="color"] {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+        }
+
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+        }
+
+        .button {
+            background: var(--anthropic-orange);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: #c86641;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: var(--anthropic-blue);
+        }
+
+        .button.secondary:hover {
+            background: #5a8bb8;
+        }
+
+        .button.tertiary {
+            background: var(--anthropic-green);
+        }
+
+        .button.tertiary:hover {
+            background: #6b7b52;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .button-row .button {
+            flex: 1;
+        }
+
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        #canvas-container {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(20, 20, 19, 0.1);
+            background: white;
+        }
+
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--anthropic-mid-gray);
+            padding: 100px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .canvas-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Kindred Network</h1>
+            <div class="subtitle">Friendship as a living web — soft bonds weaving comfort through shared space</div>
+
+            <div class="control-section">
+                <h3>Seed</h3>
+                <input type="number" id="seed-input" class="seed-input" value="12345" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← Prev</button>
+                    <button class="button secondary" onclick="nextSeed()">Next →</button>
+                </div>
+                <button class="button tertiary regen-button" onclick="randomSeedAndUpdate()">↻ Random</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Parameters</h3>
+
+                <div class="control-group">
+                    <label>Kindred Spirits</label>
+                    <div class="slider-container">
+                        <input type="range" id="nodeCount" min="10" max="40" step="2" value="20" oninput="updateParam('nodeCount', this.value)">
+                        <span class="value-display" id="nodeCount-value">20</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Friend Links per Spirit</label>
+                    <div class="slider-container">
+                        <input type="range" id="friendDegree" min="1" max="6" step="1" value="3" oninput="updateParam('friendDegree', this.value)">
+                        <span class="value-display" id="friendDegree-value">3</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Bond Softness</label>
+                    <div class="slider-container">
+                        <input type="range" id="connectionSoftness" min="0.01" max="0.15" step="0.01" value="0.06" oninput="updateParam('connectionSoftness', this.value)">
+                        <span class="value-display" id="connectionSoftness-value">0.06</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Drift Strength</label>
+                    <div class="slider-container">
+                        <input type="range" id="driftStrength" min="0.1" max="1.0" step="0.1" value="0.4" oninput="updateParam('driftStrength', this.value)">
+                        <span class="value-display" id="driftStrength-value">0.4</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Bond Glow</label>
+                    <div class="slider-container">
+                        <input type="range" id="bondGlow" min="0.2" max="1.2" step="0.1" value="0.7" oninput="updateParam('bondGlow', this.value)">
+                        <span class="value-display" id="bondGlow-value">0.7</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Colors</h3>
+
+                <div class="color-group">
+                    <label>Soft Background</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="color1" value="#fff4ec" onchange="updateColor('color1', this.value)">
+                        <span class="color-value" id="color1-value">#fff4ec</span>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <label>Warm Bonds</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="color2" value="#f7a8a3" onchange="updateColor('color2', this.value)">
+                        <span class="color-value" id="color2-value">#f7a8a3</span>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <label>Supporting Friends</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="color3" value="#9fb8ff" onchange="updateColor('color3', this.value)">
+                        <span class="color-value" id="color3-value">#9fb8ff</span>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <label>Quiet Distance</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="color4" value="#99ddc8" onchange="updateColor('color4', this.value)">
+                        <span class="color-value" id="color4-value">#99ddc8</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Actions</h3>
+                <div class="button-row">
+                    <button class="button" onclick="resetParameters()">Reset</button>
+                    <button class="button secondary" onclick="downloadImage()">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">Weaving friendships...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // KINDRED NETWORK - Friendship as a living web
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let params = {
+            seed: 12345,
+            nodeCount: 20,
+            friendDegree: 3,
+            connectionSoftness: 0.06,
+            driftStrength: 0.4,
+            bondGlow: 0.7,
+            colorPalette: ['#fff4ec', '#f7a8a3', '#9fb8ff', '#99ddc8']
+        };
+
+        let defaultParams = JSON.parse(JSON.stringify(params));
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Core System
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let nodes = [];
+        let time = 0;
+
+        function setup() {
+            let canvas = createCanvas(900, 900);
+            canvas.parent('canvas-container');
+            colorMode(RGB, 255, 255, 255, 1);
+            initializeSystem();
+            document.querySelector('.loading').style.display = 'none';
+            frameRate(40);
+        }
+
+        function initializeSystem() {
+            randomSeed(params.seed);
+            noiseSeed(params.seed);
+            nodes = [];
+            time = 0;
+
+            let count = floor(params.nodeCount);
+            let radius = min(width, height) * 0.36;
+
+            for (let i = 0; i < count; i++) {
+                let angle = (TWO_PI / count) * i + random(-0.25, 0.25);
+                let r = radius * random(0.4, 1.0);
+                let x = width / 2 + cos(angle) * r;
+                let y = height / 2 + sin(angle) * r;
+
+                nodes.push({
+                    x: x,
+                    y: y,
+                    vx: 0,
+                    vy: 0,
+                    size: random(10, 24),
+                    colorIndex: floor(random(1, params.colorPalette.length)), // avoid background color
+                    friends: [],
+                    noiseOffset: random(1000, 5000)
+                });
+            }
+
+            // Build friendship graph: soft, overlapping clusters
+            let degree = max(1, floor(params.friendDegree));
+
+            for (let i = 0; i < nodes.length; i++) {
+                let friendSet = new Set();
+
+                // Always connect to neighbors in index space to create rings
+                let neighbor1 = (i + 1) % nodes.length;
+                let neighbor2 = (i - 1 + nodes.length) % nodes.length;
+                friendSet.add(neighbor1);
+                friendSet.add(neighbor2);
+
+                // Additional random friends
+                while (friendSet.size < degree + 2 && friendSet.size < nodes.length - 1) {
+                    let candidate = floor(random(nodes.length));
+                    if (candidate !== i) {
+                        friendSet.add(candidate);
+                    }
+                }
+
+                nodes[i].friends = Array.from(friendSet);
+            }
+        }
+
+        function draw() {
+            let bgCol = hexToRgb(params.colorPalette[0]);
+            background(bgCol.r, bgCol.g, bgCol.b);
+
+            time += 0.01;
+
+            drawAmbientGlow();
+            updateNodes();
+            drawBonds();
+            drawNodes();
+        }
+
+        function drawAmbientGlow() {
+            noStroke();
+
+            // central comfort halo
+            let centerCol = hexToRgb(params.colorPalette[1]);
+            for (let r = 420; r > 0; r -= 40) {
+                let alpha = 0.02 * (1 - r / 420);
+                fill(centerCol.r, centerCol.g, centerCol.b, alpha);
+                ellipse(width / 2, height / 2, r * 2, r * 2);
+            }
+
+            // quiet drifting color fields
+            for (let i = 0; i < 4; i++) {
+                let col = hexToRgb(params.colorPalette[(i + 2) % params.colorPalette.length]);
+                let x = width / 2 + sin(time * 0.4 + i * 1.1) * 180;
+                let y = height / 2 + cos(time * 0.3 + i * 0.9) * 180;
+                let size = 260 + sin(time * 0.6 + i) * 60;
+                fill(col.r, col.g, col.b, 0.03);
+                ellipse(x, y, size, size);
+            }
+        }
+
+        function updateNodes() {
+            let centerX = width / 2;
+            let centerY = height / 2;
+            let softRadius = min(width, height) * 0.4;
+
+            for (let i = 0; i < nodes.length; i++) {
+                let n = nodes[i];
+                let fx = 0;
+                let fy = 0;
+
+                // per-node wandering using noise
+                let angle = noise(n.noiseOffset, time * 0.4) * TWO_PI * 2;
+                fx += cos(angle) * params.driftStrength;
+                fy += sin(angle) * params.driftStrength;
+
+                // spring-like attraction to friends
+                for (let idx of n.friends) {
+                    let friend = nodes[idx];
+                    let dx = friend.x - n.x;
+                    let dy = friend.y - n.y;
+                    let dist = sqrt(dx * dx + dy * dy) + 0.0001;
+                    let preferred = softRadius * 0.55;
+                    let softness = params.connectionSoftness;
+                    let strength = (dist - preferred) * softness;
+
+                    fx += (dx / dist) * strength;
+                    fy += (dy / dist) * strength;
+                }
+
+                // gentle repulsion from all others to keep space
+                for (let j = 0; j < nodes.length; j++) {
+                    if (i === j) continue;
+                    let other = nodes[j];
+                    let dx = other.x - n.x;
+                    let dy = other.y - n.y;
+                    let distSq = dx * dx + dy * dy;
+                    if (distSq < 0.01) continue;
+
+                    let dist = sqrt(distSq);
+                    let minDist = 40;
+                    if (dist < minDist) {
+                        let rep = (minDist - dist) * 0.002;
+                        fx -= (dx / dist) * rep;
+                        fy -= (dy / dist) * rep;
+                    }
+                }
+
+                // soft pull toward center
+                let dxCenter = centerX - n.x;
+                let dyCenter = centerY - n.y;
+                fx += dxCenter * 0.002;
+                fy += dyCenter * 0.002;
+
+                // integrate
+                n.vx = (n.vx + fx) * 0.9;
+                n.vy = (n.vy + fy) * 0.9;
+                n.x += n.vx;
+                n.y += n.vy;
+
+                // soft boundary: if too far, gently pull back
+                let dx = n.x - centerX;
+                let dy = n.y - centerY;
+                let distFromCenter = sqrt(dx * dx + dy * dy);
+                let maxRadius = softRadius * 1.2;
+                if (distFromCenter > maxRadius) {
+                    let excess = distFromCenter - maxRadius;
+                    let pull = excess * 0.02;
+                    n.x -= (dx / distFromCenter) * pull;
+                    n.y -= (dy / distFromCenter) * pull;
+                }
+            }
+        }
+
+        function drawBonds() {
+            let glowScale = params.bondGlow;
+
+            // Draw bonds once per pair
+            for (let i = 0; i < nodes.length; i++) {
+                let n = nodes[i];
+
+                for (let idx of n.friends) {
+                    if (idx <= i) continue; // avoid duplicates
+                    let friend = nodes[idx];
+
+                    let mx = (n.x + friend.x) / 2;
+                    let my = (n.y + friend.y) / 2;
+
+                    let dx = friend.x - n.x;
+                    let dy = friend.y - n.y;
+                    let dist = sqrt(dx * dx + dy * dy);
+
+                    let baseAlpha = map(dist, 40, 400, 0.35, 0.01);
+                    baseAlpha = constrain(baseAlpha, 0.01, 0.35) * glowScale;
+
+                    let colWarm = hexToRgb(params.colorPalette[1]);
+                    let colSupport = hexToRgb(params.colorPalette[2]);
+
+                    let t = 0.5 + 0.5 * sin(time * 1.3 + (i + idx) * 0.3);
+                    let r = lerp(colSupport.r, colWarm.r, t);
+                    let g = lerp(colSupport.g, colWarm.g, t);
+                    let b = lerp(colSupport.b, colWarm.b, t);
+
+                    stroke(r, g, b, baseAlpha);
+                    let thickness = map(dist, 60, 350, 3.2, 0.6);
+                    thickness = constrain(thickness, 0.6, 3.2);
+                    strokeWeight(thickness);
+                    noFill();
+
+                    let offsetAngle = atan2(dy, dx) + HALF_PI;
+                    let offsetMag = 18;
+                    let cx1 = mx + cos(offsetAngle) * offsetMag;
+                    let cy1 = my + sin(offsetAngle) * offsetMag;
+                    let cx2 = mx - cos(offsetAngle) * offsetMag;
+                    let cy2 = my - sin(offsetAngle) * offsetMag;
+
+                    beginShape();
+                    curveVertex(n.x, n.y);
+                    curveVertex(n.x, n.y);
+                    curveVertex(cx1, cy1);
+                    curveVertex(friend.x, friend.y);
+                    curveVertex(friend.x, friend.y);
+                    endShape();
+
+                    stroke(r, g, b, baseAlpha * 0.5);
+                    beginShape();
+                    curveVertex(n.x, n.y);
+                    curveVertex(n.x, n.y);
+                    curveVertex(cx2, cy2);
+                    curveVertex(friend.x, friend.y);
+                    curveVertex(friend.x, friend.y);
+                    endShape();
+                }
+            }
+        }
+
+        function drawNodes() {
+            noStroke();
+
+            for (let i = 0; i < nodes.length; i++) {
+                let n = nodes[i];
+                let col = hexToRgb(params.colorPalette[n.colorIndex]);
+
+                // outer glow
+                let layers = 4;
+                for (let j = layers; j > 0; j--) {
+                    let r = n.size * (1 + j * 0.7);
+                    let alpha = 0.03 * j;
+                    fill(col.r, col.g, col.b, alpha);
+                    ellipse(n.x, n.y, r, r);
+                }
+
+                // core
+                fill(col.r, col.g, col.b, 0.9);
+                ellipse(n.x, n.y, n.size * 1.1, n.size * 1.1);
+
+                // highlight
+                fill(255, 255, 255, 0.8);
+                ellipse(n.x - n.size * 0.22, n.y - n.size * 0.22, n.size * 0.35, n.size * 0.35);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Utility Functions
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : {r: 255, g: 244, b: 236};
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI Control Handlers
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateParam(paramName, value) {
+            let numValue = parseFloat(value);
+            params[paramName] = numValue;
+            let display = document.getElementById(paramName + '-value');
+            if (display) {
+                display.textContent = value;
+            }
+            initializeSystem();
+        }
+
+        function updateColor(colorId, value) {
+            let index = parseInt(colorId.replace('color', '')) - 1;
+            params.colorPalette[index] = value;
+            let display = document.getElementById(colorId + '-value');
+            if (display) {
+                display.textContent = value;
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // Seed Control Functions
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateSeedDisplay() {
+            document.getElementById('seed-input').value = params.seed;
+        }
+
+        function updateSeed() {
+            let input = document.getElementById('seed-input');
+            let newSeed = parseInt(input.value);
+            if (newSeed && newSeed > 0) {
+                params.seed = newSeed;
+                initializeSystem();
+            } else {
+                updateSeedDisplay();
+            }
+        }
+
+        function previousSeed() {
+            params.seed = Math.max(1, params.seed - 1);
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function nextSeed() {
+            params.seed = params.seed + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function randomSeedAndUpdate() {
+            params.seed = Math.floor(Math.random() * 999999) + 1;
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function resetParameters() {
+            params = JSON.parse(JSON.stringify(defaultParams));
+
+            document.getElementById('nodeCount').value = params.nodeCount;
+            document.getElementById('nodeCount-value').textContent = params.nodeCount;
+
+            document.getElementById('friendDegree').value = params.friendDegree;
+            document.getElementById('friendDegree-value').textContent = params.friendDegree;
+
+            document.getElementById('connectionSoftness').value = params.connectionSoftness;
+            document.getElementById('connectionSoftness-value').textContent = params.connectionSoftness;
+
+            document.getElementById('driftStrength').value = params.driftStrength;
+            document.getElementById('driftStrength-value').textContent = params.driftStrength;
+
+            document.getElementById('bondGlow').value = params.bondGlow;
+            document.getElementById('bondGlow-value').textContent = params.bondGlow;
+
+            document.getElementById('color1').value = params.colorPalette[0];
+            document.getElementById('color1-value').textContent = params.colorPalette[0];
+
+            document.getElementById('color2').value = params.colorPalette[1];
+            document.getElementById('color2-value').textContent = params.colorPalette[1];
+
+            document.getElementById('color3').value = params.colorPalette[2];
+            document.getElementById('color3-value').textContent = params.colorPalette[2];
+
+            document.getElementById('color4').value = params.colorPalette[3];
+            document.getElementById('color4-value').textContent = params.colorPalette[3];
+
+            updateSeedDisplay();
+            initializeSystem();
+        }
+
+        function downloadImage() {
+            saveCanvas('kindred-network-' + params.seed, 'png');
+        }
+
+        window.addEventListener('load', function() {
+            updateSeedDisplay();
+        });
+    </script>
+</body>
+</html>
+
