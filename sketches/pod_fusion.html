@@ -665,9 +665,6 @@
             drawAmbientParticles();
             drawParticleTrails();
 
-            // Draw energy bridges
-            drawEnergyBridges();
-
             // Draw pods (back to front)
             for (let p of sortedPods) {
                 drawPod(p);
@@ -920,52 +917,6 @@
                 pod.z += pod.vz * params.podSpeed;
 
                 pod.phase += pod.pulseSpeed;
-            }
-        }
-
-        function drawEnergyBridges() {
-            for (let i = energyBridges.length - 1; i >= 0; i--) {
-                let bridge = energyBridges[i];
-                bridge.progress += 0.08;
-                bridge.life--;
-
-                if (bridge.life <= 0) {
-                    energyBridges.splice(i, 1);
-                    continue;
-                }
-
-                let fromRot = rotatePoint(bridge.from.x, bridge.from.y, bridge.from.z);
-                let toRot = rotatePoint(bridge.to.x, bridge.to.y, bridge.to.z);
-
-                let alpha = (bridge.life / 30) * 0.6;
-
-                // Gradient line
-                let steps = 20;
-                for (let s = 0; s < steps; s++) {
-                    let t = s / steps;
-                    let x = lerp(fromRot.x, toRot.x, t);
-                    let y = lerp(fromRot.y, toRot.y, t);
-
-                    let col1 = hexToRgb(bridge.from.colors[0]);
-                    let col2 = hexToRgb(bridge.to.colors[0]);
-
-                    let r = lerp(col1.r, col2.r, t);
-                    let g = lerp(col1.g, col2.g, t);
-                    let b = lerp(col1.b, col2.b, t);
-
-                    let wave = sin(t * PI * 4 + time * 10) * 0.3 + 0.7;
-                    fill(r, g, b, alpha * wave);
-                    noStroke();
-                    ellipse(x, y, 4, 4);
-                }
-
-                // Traveling particle
-                let particleT = (bridge.progress % 1);
-                let px = lerp(fromRot.x, toRot.x, particleT);
-                let py = lerp(fromRot.y, toRot.y, particleT);
-
-                fill(255, 255, 255, alpha);
-                ellipse(px, py, 8, 8);
             }
         }
 
