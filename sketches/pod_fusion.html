@@ -559,18 +559,23 @@
             }
 
             // Create ambient particles inside sphere
-            for (let i = 0; i < 400; i++) {
+            // Fewer, larger "trust particles" for atmospheric feel
+            for (let i = 0; i < 120; i++) {
                 let r = random(sphereRadius * 0.3, sphereRadius * 0.95);
                 let theta = random(TWO_PI);
                 let phi = random(PI);
+
+                // Assign a color from the palette for each particle
+                let colorIndex = floor(random(params.colorPalette.length));
 
                 ambientParticles.push({
                     x: r * sin(phi) * cos(theta),
                     y: r * sin(phi) * sin(theta),
                     z: r * cos(phi),
-                    size: random(1, 2.5),
-                    alpha: random(0.2, 0.5),
-                    speed: random(0.002, 0.006)
+                    size: random(3, 7),  // Larger particles
+                    alpha: random(0.15, 0.35),  // Softer alpha
+                    speed: random(0.001, 0.004),  // Slower, more ethereal movement
+                    colorIndex: colorIndex  // For blendColors-based coloring
                 });
             }
 
@@ -628,6 +633,9 @@
             // Background
             background(13, 13, 26);
 
+            // Vignette effect - darker edges, brighter center
+            drawVignette();
+
             time += 0.016;
             breathPhase += 0.02;  // Breathing animation speed
 
@@ -643,8 +651,8 @@
             // Draw breathing sphere boundary
             drawBreathingSphere();
 
-            // Draw sphere structure (disabled)
-            // drawSphereStructure();
+            // Draw sphere structure with subtle wireframe
+            drawSphereStructure();
 
             // Sort pods by z for proper depth rendering
             let sortedPods = [...pods].map((p, i) => ({...p, index: i}));
@@ -790,13 +798,31 @@
             return { x: x1, y: y1, z: z2 };
         }
 
-        function drawSphereStructure() {
-            // Enhanced 3D sphere with depth shading
+        function drawVignette() {
+            // Create vignette effect - darker edges focus attention to center
+            push();
+            noStroke();
+            let maxDist = sqrt(sq(width/2) + sq(height/2));
 
-            // Inner ambient glow
+            // Draw radial gradient from center (transparent) to edges (dark)
+            for (let i = 20; i >= 0; i--) {
+                let ratio = i / 20;
+                let radius = maxDist * (0.4 + ratio * 0.8);
+                let alpha = ratio * ratio * 0.4; // Quadratic falloff for softer vignette
+                fill(5, 5, 15, alpha);
+                ellipse(width/2, height/2, radius * 2, radius * 2);
+            }
+            pop();
+        }
+
+        function drawSphereStructure() {
+            // Subtle 3D sphere wireframe - reduced alpha (1/4 of original) for Pod Universe feel
+            let alphaScale = 0.25; // 1/4 of original intensity
+
+            // Inner ambient glow - very subtle
             for (let i = 8; i > 0; i--) {
                 let size = sphereRadius * 2 * (0.3 + i * 0.08);
-                let alpha = 0.015 * (8 - i);
+                let alpha = 0.015 * (8 - i) * alphaScale;
                 fill(80, 150, 255, alpha);
                 noStroke();
                 ellipse(0, 0, size, size);
@@ -805,7 +831,7 @@
             // Draw sphere wireframe with enhanced depth
             noFill();
 
-            // Latitude lines - more of them for better 3D feel
+            // Latitude lines - subtle wireframe
             for (let lat = -4; lat <= 4; lat++) {
                 let phi = PI / 2 + lat * 0.22;
                 let r = sphereRadius * sin(phi);
@@ -818,17 +844,17 @@
                     let z = r * sin(theta);
                     let rotated = rotatePoint(x, yPos, z);
 
-                    // Stronger depth effect
-                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25);
+                    // Reduced depth effect for subtlety
+                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25) * alphaScale;
                     let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
                     stroke(brightness, brightness + 40, 255, depthFactor);
-                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.5, 2));
+                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1.2));
                     vertex(rotated.x, rotated.y);
                 }
                 endShape();
             }
 
-            // Longitude lines - more of them
+            // Longitude lines - subtle wireframe
             for (let lon = 0; lon < 16; lon++) {
                 let theta = (lon / 16) * TWO_PI;
 
@@ -840,20 +866,20 @@
                     let z = sphereRadius * sin(phi) * sin(theta);
                     let rotated = rotatePoint(x, y, z);
 
-                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25);
+                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25) * alphaScale;
                     let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
                     stroke(brightness, brightness + 40, 255, depthFactor);
-                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.5, 2));
+                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1.2));
                     vertex(rotated.x, rotated.y);
                 }
                 endShape();
             }
 
-            // Outer rim glow - stronger 3D edge
+            // Outer rim glow - subtle 3D edge
             for (let i = 8; i > 0; i--) {
                 noFill();
-                stroke(120, 180, 255, 0.04 * i);
-                strokeWeight(i * 2.5);
+                stroke(120, 180, 255, 0.04 * i * alphaScale);
+                strokeWeight(i * 1.5);
                 ellipse(0, 0, sphereRadius * 2.02, sphereRadius * 2.02);
             }
 
@@ -861,7 +887,7 @@
             let highlightX = -sphereRadius * 0.3;
             let highlightY = -sphereRadius * 0.3;
             for (let i = 5; i > 0; i--) {
-                fill(200, 230, 255, 0.02 * (5 - i));
+                fill(200, 230, 255, 0.02 * (5 - i) * alphaScale);
                 noStroke();
                 ellipse(highlightX, highlightY, sphereRadius * 0.5 * i / 5, sphereRadius * 0.5 * i / 5);
             }
@@ -869,12 +895,15 @@
 
         function drawAmbientParticles() {
             noStroke();
-            let themeRgb = hexToRgb(params.themeColor);
+
+            // Get blended color from palette for "trust particles" feel
+            let blendedColor = blendColors(params.colorPalette);
+            let blendedRgb = hexToRgb(blendedColor);
 
             for (let i = 0; i < ambientParticles.length; i++) {
                 let p = ambientParticles[i];
 
-                // Slow orbit
+                // Slow ethereal orbit
                 let angle = time * p.speed;
                 let cosA = cos(angle);
                 let sinA = sin(angle);
@@ -882,27 +911,39 @@
                 let newZ = p.x * sinA + p.z * cosA;
 
                 let rotated = rotatePoint(newX, p.y, newZ);
-                let depth = map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1);
+                let depth = map(rotated.z, -sphereRadius, sphereRadius, 0.4, 1);
 
-                // Blend with theme color for cohesive look
-                let r = lerp(150, themeRgb.r, 0.4);
-                let g = lerp(200, themeRgb.g, 0.3);
-                let b = lerp(255, themeRgb.b, 0.2);
+                // Use particle's assigned color from palette, blended with overall blend
+                let particleColor = params.colorPalette[p.colorIndex % params.colorPalette.length];
+                let particleRgb = hexToRgb(particleColor);
 
+                // Soft blend between particle color and overall blend for cohesion
+                let r = lerp(particleRgb.r, blendedRgb.r, 0.4);
+                let g = lerp(particleRgb.g, blendedRgb.g, 0.4);
+                let b = lerp(particleRgb.b, blendedRgb.b, 0.4);
+
+                // Soft glow effect for larger particles
+                let glowSize = p.size * depth;
+
+                // Outer glow
+                fill(r, g, b, p.alpha * depth * 0.3);
+                ellipse(rotated.x, rotated.y, glowSize * 2, glowSize * 2);
+
+                // Core particle
                 fill(r, g, b, p.alpha * depth);
-                ellipse(rotated.x, rotated.y, p.size * depth, p.size * depth);
+                ellipse(rotated.x, rotated.y, glowSize, glowSize);
 
-                // Add trail for some particles (every 5th particle, occasionally)
-                if (i % 5 === 0 && random() < 0.1 && particleTrails.length < 200) {
+                // Add trail occasionally for ethereal feel
+                if (i % 8 === 0 && random() < 0.05 && particleTrails.length < 100) {
                     particleTrails.push({
                         x: rotated.x,
                         y: rotated.y,
                         r: r,
                         g: g,
                         b: b,
-                        size: p.size * depth * 1.5,
-                        life: 30,
-                        maxLife: 30
+                        size: glowSize * 1.2,
+                        life: 40,
+                        maxLife: 40
                     });
                 }
             }
