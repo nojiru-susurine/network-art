@@ -648,12 +648,6 @@
             // Draw warm core light at center
             drawCoreLight();
 
-            // Draw breathing sphere boundary
-            drawBreathingSphere();
-
-            // Draw sphere structure with subtle wireframe
-            drawSphereStructure();
-
             // Sort pods by z for proper depth rendering
             let sortedPods = [...pods].map((p, i) => ({...p, index: i}));
 
@@ -733,33 +727,6 @@
             }
         }
 
-        function drawBreathingSphere() {
-            // Subtle breathing boundary that pulses
-            let breathScale = 1 + sin(breathPhase) * 0.02;
-            let themeRgb = hexToRgb(params.themeColor);
-
-            noFill();
-
-            // Outer breathing ring
-            for (let i = 3; i > 0; i--) {
-                let size = sphereRadius * 2 * breathScale + i * 8;
-                let alpha = 0.04 * (3 - i);
-                stroke(themeRgb.r, themeRgb.g, themeRgb.b, alpha);
-                strokeWeight(2);
-                ellipse(0, 0, size, size);
-            }
-
-            // Inner soft boundary
-            let innerPulse = 1 + sin(breathPhase * 1.5) * 0.03;
-            for (let i = 5; i > 0; i--) {
-                let size = sphereRadius * 1.6 * innerPulse + i * 5;
-                let alpha = 0.02 * (5 - i);
-                stroke(themeRgb.r * 0.8, themeRgb.g * 0.8, themeRgb.b * 1.2, alpha);
-                strokeWeight(1);
-                ellipse(0, 0, size, size);
-            }
-        }
-
         function drawParticleTrails() {
             // Draw fading trails for moving particles
             noStroke();
@@ -813,84 +780,6 @@
                 ellipse(width/2, height/2, radius * 2, radius * 2);
             }
             pop();
-        }
-
-        function drawSphereStructure() {
-            // Subtle 3D sphere wireframe - reduced alpha (1/4 of original) for Pod Universe feel
-            let alphaScale = 0.25; // 1/4 of original intensity
-
-            // Inner ambient glow - very subtle
-            for (let i = 8; i > 0; i--) {
-                let size = sphereRadius * 2 * (0.3 + i * 0.08);
-                let alpha = 0.015 * (8 - i) * alphaScale;
-                fill(80, 150, 255, alpha);
-                noStroke();
-                ellipse(0, 0, size, size);
-            }
-
-            // Draw sphere wireframe with enhanced depth
-            noFill();
-
-            // Latitude lines - subtle wireframe
-            for (let lat = -4; lat <= 4; lat++) {
-                let phi = PI / 2 + lat * 0.22;
-                let r = sphereRadius * sin(phi);
-                let yPos = sphereRadius * cos(phi);
-
-                beginShape();
-                for (let i = 0; i <= 80; i++) {
-                    let theta = (i / 80) * TWO_PI;
-                    let x = r * cos(theta);
-                    let z = r * sin(theta);
-                    let rotated = rotatePoint(x, yPos, z);
-
-                    // Reduced depth effect for subtlety
-                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25) * alphaScale;
-                    let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
-                    stroke(brightness, brightness + 40, 255, depthFactor);
-                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1.2));
-                    vertex(rotated.x, rotated.y);
-                }
-                endShape();
-            }
-
-            // Longitude lines - subtle wireframe
-            for (let lon = 0; lon < 16; lon++) {
-                let theta = (lon / 16) * TWO_PI;
-
-                beginShape();
-                for (let i = 0; i <= 60; i++) {
-                    let phi = (i / 60) * PI;
-                    let x = sphereRadius * sin(phi) * cos(theta);
-                    let y = sphereRadius * cos(phi);
-                    let z = sphereRadius * sin(phi) * sin(theta);
-                    let rotated = rotatePoint(x, y, z);
-
-                    let depthFactor = map(rotated.z, -sphereRadius, sphereRadius, 0.02, 0.25) * alphaScale;
-                    let brightness = map(rotated.z, -sphereRadius, sphereRadius, 60, 220);
-                    stroke(brightness, brightness + 40, 255, depthFactor);
-                    strokeWeight(map(rotated.z, -sphereRadius, sphereRadius, 0.3, 1.2));
-                    vertex(rotated.x, rotated.y);
-                }
-                endShape();
-            }
-
-            // Outer rim glow - subtle 3D edge
-            for (let i = 8; i > 0; i--) {
-                noFill();
-                stroke(120, 180, 255, 0.04 * i * alphaScale);
-                strokeWeight(i * 1.5);
-                ellipse(0, 0, sphereRadius * 2.02, sphereRadius * 2.02);
-            }
-
-            // Highlight on front of sphere (3D lighting effect)
-            let highlightX = -sphereRadius * 0.3;
-            let highlightY = -sphereRadius * 0.3;
-            for (let i = 5; i > 0; i--) {
-                fill(200, 230, 255, 0.02 * (5 - i) * alphaScale);
-                noStroke();
-                ellipse(highlightX, highlightY, sphereRadius * 0.5 * i / 5, sphereRadius * 0.5 * i / 5);
-            }
         }
 
         function drawAmbientParticles() {
