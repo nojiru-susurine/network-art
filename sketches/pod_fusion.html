@@ -1405,73 +1405,73 @@
 
             switch (harmony) {
                 case 'analogous':
-                    // 類似色: 基準色の両側30度ずつ
+                    // 類似色: 彩度維持、色相のみ変化
                     palette = [
                         hslToHex(hsl.h - 30, hsl.s, hsl.l),
-                        hslToHex(hsl.h - 15, hsl.s, hsl.l + 5),
+                        hslToHex(hsl.h - 15, hsl.s, hsl.l),
                         baseColor,
-                        hslToHex(hsl.h + 15, hsl.s, hsl.l + 5),
+                        hslToHex(hsl.h + 15, hsl.s, hsl.l),
                         hslToHex(hsl.h + 30, hsl.s, hsl.l),
-                        hslToHex(hsl.h - 20, hsl.s - 10, hsl.l + 15),
-                        hslToHex(hsl.h + 20, hsl.s - 10, hsl.l + 15),
-                        hslToHex(hsl.h, hsl.s - 15, hsl.l + 20)
+                        hslToHex(hsl.h - 20, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 20, hsl.s, hsl.l),
+                        hslToHex(hsl.h - 10, hsl.s, hsl.l)
                     ];
                     break;
 
                 case 'complementary':
-                    // 補色: 180度反対側
+                    // 補色: 彩度維持
                     let comp = (hsl.h + 180) % 360;
                     palette = [
                         baseColor,
-                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 10),
-                        hslToHex(hsl.h, hsl.s - 20, hsl.l + 20),
+                        hslToHex(hsl.h + 10, hsl.s, hsl.l),
+                        hslToHex(hsl.h - 10, hsl.s, hsl.l),
                         hslToHex(comp, hsl.s, hsl.l),
-                        hslToHex(comp, hsl.s - 10, hsl.l + 10),
-                        hslToHex(comp, hsl.s - 20, hsl.l + 20),
+                        hslToHex(comp + 10, hsl.s, hsl.l),
+                        hslToHex(comp - 10, hsl.s, hsl.l),
                         hslToHex(hsl.h + 15, hsl.s, hsl.l),
                         hslToHex(comp + 15, hsl.s, hsl.l)
                     ];
                     break;
 
                 case 'triadic':
-                    // 三色: 120度間隔
+                    // 三色: 彩度維持
                     palette = [
                         baseColor,
-                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 10, hsl.s, hsl.l),
                         hslToHex(hsl.h + 120, hsl.s, hsl.l),
-                        hslToHex(hsl.h + 120, hsl.s - 10, hsl.l + 15),
+                        hslToHex(hsl.h + 130, hsl.s, hsl.l),
                         hslToHex(hsl.h + 240, hsl.s, hsl.l),
-                        hslToHex(hsl.h + 240, hsl.s - 10, hsl.l + 15),
-                        hslToHex(hsl.h + 60, hsl.s - 15, hsl.l + 20),
-                        hslToHex(hsl.h + 180, hsl.s - 15, hsl.l + 20)
+                        hslToHex(hsl.h + 250, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 60, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 180, hsl.s, hsl.l)
                     ];
                     break;
 
                 case 'tetradic':
-                    // 四色: 90度間隔
+                    // 四色: 彩度維持
                     palette = [
                         baseColor,
                         hslToHex(hsl.h + 90, hsl.s, hsl.l),
                         hslToHex(hsl.h + 180, hsl.s, hsl.l),
                         hslToHex(hsl.h + 270, hsl.s, hsl.l),
-                        hslToHex(hsl.h, hsl.s - 15, hsl.l + 15),
-                        hslToHex(hsl.h + 90, hsl.s - 15, hsl.l + 15),
-                        hslToHex(hsl.h + 180, hsl.s - 15, hsl.l + 15),
-                        hslToHex(hsl.h + 270, hsl.s - 15, hsl.l + 15)
+                        hslToHex(hsl.h + 45, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 135, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 225, hsl.s, hsl.l),
+                        hslToHex(hsl.h + 315, hsl.s, hsl.l)
                     ];
                     break;
 
                 case 'monochromatic':
-                    // 同系色: 彩度と明度のバリエーション
+                    // 同系色: 彩度維持、明度のみ微調整
                     palette = [
-                        hslToHex(hsl.h, hsl.s, hsl.l - 20),
-                        hslToHex(hsl.h, hsl.s - 10, hsl.l - 10),
+                        hslToHex(hsl.h, hsl.s, hsl.l - 10),
+                        hslToHex(hsl.h, hsl.s, hsl.l - 5),
                         baseColor,
-                        hslToHex(hsl.h, hsl.s - 10, hsl.l + 10),
-                        hslToHex(hsl.h, hsl.s - 20, hsl.l + 20),
-                        hslToHex(hsl.h, hsl.s + 10, hsl.l),
-                        hslToHex(hsl.h, hsl.s - 30, hsl.l + 25),
-                        hslToHex(hsl.h, hsl.s - 5, hsl.l + 5)
+                        hslToHex(hsl.h, hsl.s, hsl.l + 5),
+                        hslToHex(hsl.h, hsl.s, hsl.l + 10),
+                        hslToHex(hsl.h + 5, hsl.s, hsl.l),
+                        hslToHex(hsl.h - 5, hsl.s, hsl.l),
+                        hslToHex(hsl.h, hsl.s, hsl.l)
                     ];
                     break;
 
