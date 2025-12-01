@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C4 Final-1 Optimized</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      padding: 32px;
+      color: #1e293b;
+    }
+    h1 { text-align: center; margin-bottom: 8px; font-size: 26px; }
+    .intro { text-align: center; color: #64748b; margin-bottom: 32px; font-size: 14px; }
+
+    .original-section {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .original-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 12px;
+    }
+    .original-pods {
+      display: flex;
+      gap: 12px;
+    }
+    .original-pod {
+      flex: 1;
+      height: 50px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .themes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .theme-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .theme-card.recommended {
+      border: 3px solid #10b981;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+    }
+    .recommended-badge {
+      background: #10b981;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-left: auto;
+    }
+    .theme-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .theme-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .theme-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .pod-label-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .pod-label {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .pod-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .pod-color {
+      flex: 1;
+      height: 70px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 8px;
+    }
+    .pod-hex {
+      font-size: 10px;
+      font-family: monospace;
+      color: rgba(255,255,255,0.95);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      font-weight: 600;
+    }
+    .hsl-info {
+      font-size: 8px;
+      color: rgba(255,255,255,0.7);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+    .changes {
+      background: #f0fdf4;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 16px;
+      font-size: 11px;
+      color: #166534;
+    }
+    .changes strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>C4 Final-1: Balanced - 最適化版</h1>
+  <p class="intro">彩度・明度を調整した複数パターン</p>
+
+  <!-- Original -->
+  <div class="original-section">
+    <div class="original-title">現在の C4 Final-1（比較用）</div>
+    <div class="original-pods">
+      <div class="original-pod" style="background: #fb923c">Self<br>#fb923c</div>
+      <div class="original-pod" style="background: #14b8a6">Pair<br>#14b8a6</div>
+      <div class="original-pod" style="background: #3b82f6">Quad<br>#3b82f6</div>
+      <div class="original-pod" style="background: #8b5cf6">Circle<br>#8b5cf6</div>
+    </div>
+  </div>
+
+  <div class="themes-grid">
+
+    <!-- Opt-1: 彩度を揃える -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-name">Opt-1: 彩度統一</span>
+      </div>
+      <div class="theme-desc">全色の彩度を85%前後に統一。明度は55-60%で揃え、均一な鮮やかさ。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #f97316">
+          <span class="pod-hex">#f97316</span>
+          <span class="hsl-info">H:25 S:95 L:53</span>
+        </div>
+        <div class="pod-color" style="background: #14b8a6">
+          <span class="pod-hex">#14b8a6</span>
+          <span class="hsl-info">H:174 S:82 L:40</span>
+        </div>
+        <div class="pod-color" style="background: #3b82f6">
+          <span class="pod-hex">#3b82f6</span>
+          <span class="hsl-info">H:217 S:91 L:60</span>
+        </div>
+        <div class="pod-color" style="background: #8b5cf6">
+          <span class="pod-hex">#8b5cf6</span>
+          <span class="hsl-info">H:258 S:90 L:66</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        Self: #fb923c → #f97316（より鮮やかなオレンジ）
+      </div>
+    </div>
+
+    <!-- Opt-2: やや落ち着いた彩度 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-name">Opt-2: 落ち着いた鮮やかさ</span>
+      </div>
+      <div class="theme-desc">彩度を75-80%に抑え、より上品で落ち着いた印象に。目に優しい。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #f59e0b">
+          <span class="pod-hex">#f59e0b</span>
+          <span class="hsl-info">H:43 S:96 L:50</span>
+        </div>
+        <div class="pod-color" style="background: #0d9488">
+          <span class="pod-hex">#0d9488</span>
+          <span class="hsl-info">H:175 S:84 L:32</span>
+        </div>
+        <div class="pod-color" style="background: #2563eb">
+          <span class="pod-hex">#2563eb</span>
+          <span class="hsl-info">H:221 S:83 L:53</span>
+        </div>
+        <div class="pod-color" style="background: #7c3aed">
+          <span class="pod-hex">#7c3aed</span>
+          <span class="hsl-info">H:258 S:85 L:58</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        Self: アンバー系、Pair: より深いティール、Quad/Circle: より深い青紫
+      </div>
+    </div>
+
+    <!-- Opt-3: 明度バランス最適化 -->
+    <div class="theme-card recommended">
+      <div class="theme-header">
+        <span class="theme-name">Opt-3: 明度バランス</span>
+        <span class="recommended-badge">おすすめ</span>
+      </div>
+      <div class="theme-desc">各色の明度を50-55%で揃え、白背景でもダーク背景でも映える。彩度は高めをキープ。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #ea580c">
+          <span class="pod-hex">#ea580c</span>
+          <span class="hsl-info">H:21 S:90 L:48</span>
+        </div>
+        <div class="pod-color" style="background: #0891b2">
+          <span class="pod-hex">#0891b2</span>
+          <span class="hsl-info">H:189 S:94 L:37</span>
+        </div>
+        <div class="pod-color" style="background: #2563eb">
+          <span class="pod-hex">#2563eb</span>
+          <span class="hsl-info">H:221 S:83 L:53</span>
+        </div>
+        <div class="pod-color" style="background: #7c3aed">
+          <span class="pod-hex">#7c3aed</span>
+          <span class="hsl-info">H:258 S:85 L:58</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        Self: より深いオレンジ、Pair: シアン系でより鮮明、全体的に明度を下げて引き締め
+      </div>
+    </div>
+
+    <!-- Opt-4: ビビッド -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-name">Opt-4: ビビッド</span>
+      </div>
+      <div class="theme-desc">彩度を最大限に高め、インパクトのある配色。若々しく活発な印象。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #ff6b00">
+          <span class="pod-hex">#ff6b00</span>
+          <span class="hsl-info">H:25 S:100 L:50</span>
+        </div>
+        <div class="pod-color" style="background: #00bfa5">
+          <span class="pod-hex">#00bfa5</span>
+          <span class="hsl-info">H:172 S:100 L:37</span>
+        </div>
+        <div class="pod-color" style="background: #2979ff">
+          <span class="pod-hex">#2979ff</span>
+          <span class="hsl-info">H:220 S:100 L:58</span>
+        </div>
+        <div class="pod-color" style="background: #7c4dff">
+          <span class="pod-hex">#7c4dff</span>
+          <span class="hsl-info">H:256 S:100 L:65</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        全色の彩度を100%に。Material Design風のビビッドカラー。
+      </div>
+    </div>
+
+    <!-- Opt-5: ソフト -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-name">Opt-5: ソフト</span>
+      </div>
+      <div class="theme-desc">彩度を65-75%に抑え、パステル寄りの優しい色合い。落ち着いた大人向け。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #fb923c">
+          <span class="pod-hex">#fb923c</span>
+          <span class="hsl-info">H:31 S:96 L:61</span>
+        </div>
+        <div class="pod-color" style="background: #2dd4bf">
+          <span class="pod-hex">#2dd4bf</span>
+          <span class="hsl-info">H:172 S:66 L:50</span>
+        </div>
+        <div class="pod-color" style="background: #60a5fa">
+          <span class="pod-hex">#60a5fa</span>
+          <span class="hsl-info">H:213 S:94 L:68</span>
+        </div>
+        <div class="pod-color" style="background: #a78bfa">
+          <span class="pod-hex">#a78bfa</span>
+          <span class="hsl-info">H:258 S:90 L:76</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        Pair: より明るいミント、Quad/Circle: より明るく柔らかい印象
+      </div>
+    </div>
+
+    <!-- Opt-6: 深み重視 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-name">Opt-6: 深み重視</span>
+      </div>
+      <div class="theme-desc">明度を下げて深みと重厚感を出す。プレミアム感のある配色。</div>
+      <div class="pod-label-row">
+        <span class="pod-label">Self</span>
+        <span class="pod-label">Pair</span>
+        <span class="pod-label">Quad</span>
+        <span class="pod-label">Circle</span>
+      </div>
+      <div class="pod-row">
+        <div class="pod-color" style="background: #c2410c">
+          <span class="pod-hex">#c2410c</span>
+          <span class="hsl-info">H:21 S:89 L:40</span>
+        </div>
+        <div class="pod-color" style="background: #0f766e">
+          <span class="pod-hex">#0f766e</span>
+          <span class="hsl-info">H:174 S:78 L:26</span>
+        </div>
+        <div class="pod-color" style="background: #1d4ed8">
+          <span class="pod-hex">#1d4ed8</span>
+          <span class="hsl-info">H:226 S:76 L:48</span>
+        </div>
+        <div class="pod-color" style="background: #6d28d9">
+          <span class="pod-hex">#6d28d9</span>
+          <span class="hsl-info">H:263 S:70 L:50</span>
+        </div>
+      </div>
+      <div class="changes">
+        <strong>変更点:</strong>
+        全体的に明度を30-50%に下げ、深みと高級感を演出
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

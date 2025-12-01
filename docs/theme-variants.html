@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Variants - 1 & 3 Base</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      padding: 32px;
+      color: #1e293b;
+    }
+    h1 { text-align: center; margin-bottom: 8px; font-size: 26px; }
+    .intro { text-align: center; color: #64748b; margin-bottom: 32px; font-size: 14px; }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 40px 0 20px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .section-title.original { color: #6366f1; border-color: #6366f1; }
+    .section-title.variant { color: #10b981; border-color: #10b981; }
+
+    .themes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .theme-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .theme-card.original {
+      border: 2px solid #6366f1;
+    }
+    .theme-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .theme-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .theme-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .theme-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .category {
+      margin-bottom: 16px;
+    }
+    .category-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .color-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .color-info {
+      font-size: 10px;
+    }
+    .color-name {
+      font-weight: 600;
+      color: #334155;
+    }
+    .color-code {
+      font-family: monospace;
+      color: #64748b;
+    }
+    .impression {
+      margin-top: 16px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Theme Variants</h1>
+  <p class="intro">1. Vibrant Mix と 3. Cool Ocean をベースにした派生案</p>
+
+  <!-- Original Themes -->
+  <div class="section-title original">オリジナル（比較用）</div>
+  <div class="themes-grid">
+
+    <!-- 1. Vibrant Mix -->
+    <div class="theme-card original">
+      <div class="theme-header">
+        <span class="theme-number">1</span>
+        <span class="theme-name">Vibrant Mix</span>
+      </div>
+      <div class="theme-desc">暖色と寒色のビビッドなミックス — 遊び心と信頼感</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22d3ee"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#22d3ee</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #4ade80"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#4ade80</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fbbf24"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#fbbf24</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #06b6d4"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#06b6d4</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22c55e"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#22c55e</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#fafafa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">Discord/Figmaのような親しみやすさ。テック系スタートアップ風。</div>
+    </div>
+
+    <!-- 3. Cool Ocean -->
+    <div class="theme-card original">
+      <div class="theme-header">
+        <span class="theme-number">3</span>
+        <span class="theme-name">Cool Ocean</span>
+      </div>
+      <div class="theme-desc">寒色系のクールなブレンド — 信頼感と開放感</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #6ee7b7"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#6ee7b7</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #60a5fa"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#60a5fa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #c084fc"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#c084fc</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b82f6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#3b82f6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #10b981"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#10b981</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f0fdf4"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#f0fdf4</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">爽やかで信頼感がある。性別を問わない。成長や健全な関係を連想。</div>
+    </div>
+  </div>
+
+  <!-- Variants -->
+  <div class="section-title variant">派生案</div>
+  <div class="themes-grid">
+
+    <!-- 1a: Vibrant Mix + ニュートラル背景 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">1a</span>
+        <span class="theme-name">Vibrant Neutral</span>
+      </div>
+      <div class="theme-desc">1のビビッドな配色 + ニュートラルな白背景（3のような落ち着き）</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22d3ee"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#22d3ee</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #4ade80"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#4ade80</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fbbf24"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#fbbf24</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #06b6d4"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#06b6d4</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22c55e"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#22c55e</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#ffffff</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#fafafa</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">1の遊び心を保ちつつ、より落ち着いた印象に。</div>
+    </div>
+
+    <!-- 1b: Vibrant Mix + 彩度を少し下げる -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">1b</span>
+        <span class="theme-name">Vibrant Soft</span>
+      </div>
+      <div class="theme-desc">1のPod色の彩度を少し下げて、より優しい印象に</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #c4b5fd"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#c4b5fd</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #67e8f9"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#67e8f9</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #86efac"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#86efac</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fcd34d"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#fcd34d</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #06b6d4"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#06b6d4</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22c55e"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#22c55e</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#fafafa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">パステル調で優しく、長時間見ても疲れにくい。</div>
+    </div>
+
+    <!-- 3a: Cool Ocean + ニュートラル背景 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">3a</span>
+        <span class="theme-name">Ocean Neutral</span>
+      </div>
+      <div class="theme-desc">3の寒色系配色 + グリーン背景をニュートラルに変更</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #6ee7b7"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#6ee7b7</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #60a5fa"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#60a5fa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #c084fc"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#c084fc</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b82f6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#3b82f6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #10b981"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#10b981</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#fafafa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">3の信頼感を保ちつつ、よりプロフェッショナルな印象に。</div>
+    </div>
+
+    <!-- 3b: Cool Ocean + 深い色調 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">3b</span>
+        <span class="theme-name">Ocean Deep</span>
+      </div>
+      <div class="theme-desc">3のPod色を少し深くして、より落ち着いた印象に</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #34d399"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#34d399</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b82f6"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#3b82f6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a855f7"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#a855f7</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #2563eb"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#2563eb</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #059669"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#059669</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #7c3aed"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#7c3aed</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f8fafc"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#f8fafc</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">より成熟した印象。ビジネス向けにも使える。</div>
+    </div>
+
+    <!-- Mix: 1と3のハイブリッド -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">H1</span>
+        <span class="theme-name">Hybrid Fresh</span>
+      </div>
+      <div class="theme-desc">1のPrimary(紫) + 3のPod色（寒色グラデーション）</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #6ee7b7"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#6ee7b7</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #60a5fa"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#60a5fa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #c084fc"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#c084fc</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #06b6d4"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#06b6d4</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #10b981"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#10b981</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#fafafa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">1の遊び心あるブランドカラー + 3の落ち着いたPod色。バランス型。</div>
+    </div>
+
+    <!-- Mix: 1と3のハイブリッド逆 -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <span class="theme-number">H2</span>
+        <span class="theme-name">Hybrid Vibrant</span>
+      </div>
+      <div class="theme-desc">3のPrimary(青) + 1のPod色（ビビッドミックス）</div>
+
+      <div class="category">
+        <div class="category-title">Pod状態</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa"></div>
+            <div class="color-info"><div class="color-name">Self</div><div class="color-code">#a78bfa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #22d3ee"></div>
+            <div class="color-info"><div class="color-name">Pair</div><div class="color-code">#22d3ee</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #4ade80"></div>
+            <div class="color-info"><div class="color-name">Quad</div><div class="color-code">#4ade80</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fbbf24"></div>
+            <div class="color-info"><div class="color-name">Connect</div><div class="color-code">#fbbf24</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">ブランド</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b82f6"></div>
+            <div class="color-info"><div class="color-name">Primary</div><div class="color-code">#3b82f6</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #10b981"></div>
+            <div class="color-info"><div class="color-name">Secondary</div><div class="color-code">#10b981</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6"></div>
+            <div class="color-info"><div class="color-name">Tertiary</div><div class="color-code">#8b5cf6</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="category-title">背景</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafafa"></div>
+            <div class="color-info"><div class="color-name">Background</div><div class="color-code">#fafafa</div></div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff; border: 1px solid #e5e7eb"></div>
+            <div class="color-info"><div class="color-name">Surface</div><div class="color-code">#ffffff</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impression">3の信頼感あるブランドカラー + 1の活発なPod色。エネルギッシュ。</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

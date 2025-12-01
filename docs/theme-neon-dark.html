@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mimoza App - Neon Dark Theme</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #05070b;
+      padding: 40px;
+      color: #f9fafb;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #c6ff00;
+      text-shadow: 0 0 20px rgba(198, 255, 0, 0.5);
+    }
+    .intro {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    .theme-card {
+      background: #070a10;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid #1f2933;
+    }
+    .theme-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f9fafb;
+    }
+    .theme-description {
+      color: #9ca3af;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .category {
+      margin-bottom: 24px;
+    }
+    .category:last-child {
+      margin-bottom: 0;
+    }
+    .category-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1f2933;
+    }
+    .color-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .color-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100px;
+    }
+    .color-swatch {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .color-swatch.glow {
+      box-shadow: 0 0 15px currentColor;
+    }
+    .color-swatch.transparent-bg {
+      background: linear-gradient(45deg, #1f2933 25%, transparent 25%),
+                  linear-gradient(-45deg, #1f2933 25%, transparent 25%),
+                  linear-gradient(45deg, transparent 75%, #1f2933 75%),
+                  linear-gradient(-45deg, transparent 75%, #1f2933 75%);
+      background-size: 10px 10px;
+      background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+    }
+    .color-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #e5e7eb;
+      text-align: center;
+    }
+    .color-var {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+    .color-code {
+      font-size: 10px;
+      color: #9ca3af;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Neon Dark Theme</h1>
+  <p class="intro">ネオンライム × グロウオレンジ — 宇宙的なダークテーマ</p>
+
+  <div class="theme-card">
+    <div class="theme-title">Neon Cosmos</div>
+    <div class="theme-description">深い宇宙のような暗い背景に、ネオンカラーが映える。生命力とエネルギーを表現。</div>
+
+    <div class="category">
+      <div class="category-title">ブランド</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #c6ff00; color: #c6ff00"></div>
+          <div class="color-name">Primary</div>
+          <div class="color-var">primary</div>
+          <div class="color-code">#c6ff00</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ff9800; color: #ff9800"></div>
+          <div class="color-name">Secondary</div>
+          <div class="color-var">secondary</div>
+          <div class="color-code">#ff9800</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">状態</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #b3ff4a; color: #b3ff4a"></div>
+          <div class="color-name">Success</div>
+          <div class="color-var">success</div>
+          <div class="color-code">#b3ff4a</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ff4b4b; color: #ff4b4b"></div>
+          <div class="color-name">Error</div>
+          <div class="color-var">error</div>
+          <div class="color-code">#ff4b4b</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ffd54a; color: #ffd54a"></div>
+          <div class="color-name">Warning</div>
+          <div class="color-var">warning</div>
+          <div class="color-code">#ffd54a</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">背景</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #05070b; border: 1px solid #1f2933"></div>
+          <div class="color-name">Primary</div>
+          <div class="color-var">background.primary</div>
+          <div class="color-code">#05070b</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #070a10; border: 1px solid #1f2933"></div>
+          <div class="color-name">Secondary</div>
+          <div class="color-var">background.secondary</div>
+          <div class="color-code">#070a10</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #0b1018; border: 1px solid #1f2933"></div>
+          <div class="color-name">Tertiary</div>
+          <div class="color-var">background.tertiary</div>
+          <div class="color-code">#0b1018</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">テキスト</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #f9fafb"></div>
+          <div class="color-name">Primary</div>
+          <div class="color-var">text.primary</div>
+          <div class="color-code">#f9fafb</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #e5e7eb"></div>
+          <div class="color-name">Secondary</div>
+          <div class="color-var">text.secondary</div>
+          <div class="color-code">#e5e7eb</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #9ca3af"></div>
+          <div class="color-name">Tertiary</div>
+          <div class="color-var">text.tertiary</div>
+          <div class="color-code">#9ca3af</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #05070b; border: 1px solid #1f2933"></div>
+          <div class="color-name">Inverse</div>
+          <div class="color-var">text.inverse</div>
+          <div class="color-code">#05070b</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">ボーダー</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #1f2933"></div>
+          <div class="color-name">Light</div>
+          <div class="color-var">border.light</div>
+          <div class="color-code">#1f2933</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #111827"></div>
+          <div class="color-name">Medium</div>
+          <div class="color-var">border.medium</div>
+          <div class="color-code">#111827</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #020617; border: 1px solid #1f2933"></div>
+          <div class="color-name">Dark</div>
+          <div class="color-var">border.dark</div>
+          <div class="color-code">#020617</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">Podタイプ</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #c6ff00; color: #c6ff00"></div>
+          <div class="color-name">Self</div>
+          <div class="color-var">podType.self</div>
+          <div class="color-code">#c6ff00</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ffd54a; color: #ffd54a"></div>
+          <div class="color-name">Pair</div>
+          <div class="color-var">podType.pair</div>
+          <div class="color-code">#ffd54a</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ff9800; color: #ff9800"></div>
+          <div class="color-name">Quad</div>
+          <div class="color-var">podType.quad</div>
+          <div class="color-code">#ff9800</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ff5722; color: #ff5722"></div>
+          <div class="color-name">Circle</div>
+          <div class="color-var">podType.circle</div>
+          <div class="color-code">#ff5722</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #9ca34a"></div>
+          <div class="color-name">Default</div>
+          <div class="color-var">podType.default</div>
+          <div class="color-code">#9ca34a</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">コンポーネント</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #c6ff00; color: #c6ff00"></div>
+          <div class="color-name">TabBar Active</div>
+          <div class="color-var">component.tabBarActive</div>
+          <div class="color-code">#c6ff00</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #6b7280"></div>
+          <div class="color-name">TabBar Inactive</div>
+          <div class="color-var">component.tabBarInactive</div>
+          <div class="color-code">#6b7280</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #f9fafb"></div>
+          <div class="color-name">Header Text</div>
+          <div class="color-var">component.headerText</div>
+          <div class="color-code">#f9fafb</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #9ca3af"></div>
+          <div class="color-name">Subtitle Text</div>
+          <div class="color-var">component.subtitleText</div>
+          <div class="color-code">#9ca3af</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch glow" style="background: #ff4b4b; color: #ff4b4b"></div>
+          <div class="color-name">Error Text</div>
+          <div class="color-var">component.errorText</div>
+          <div class="color-code">#ff4b4b</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-title">ユーティリティ</div>
+      <div class="color-row">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #ffffff"></div>
+          <div class="color-name">White</div>
+          <div class="color-var">white</div>
+          <div class="color-code">#ffffff</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #000000; border: 1px solid #1f2933"></div>
+          <div class="color-name">Black</div>
+          <div class="color-var">black</div>
+          <div class="color-code">#000000</div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch transparent-bg"></div>
+          <div class="color-name">Transparent</div>
+          <div class="color-var">transparent</div>
+          <div class="color-code">transparent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
