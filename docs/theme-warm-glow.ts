@@ -1,57 +1,26 @@
-export const colors = {
-  // ブランド
-  primary: '#ffb347',   // あたたかいアンバーオレンジ
-  secondary: '#ffe66d', // 柔らかいグロウイエロー
+/**
+ * Mimoza App - Warm Glow Theme
+ * Dark theme with warm amber/orange tones
+ *
+ * Brand-level prototype colors mapped from current usage.
+ * These correspond to the brand guideline slots:
+ * - Main Colors: Dark / Light / Mid Gray / Light Gray
+ * - Accent Colors: Primary / Secondary / Third / Fourth
+ */
 
-  // 状態
-  success: '#b8ff6a',   // ライム寄りのハッピーグリーン
-  error: '#ff4b4b',     // あざやかなレッド
-  warning: '#ffd66b',   // 暖かいハニーイエロー
-
-  // 背景（暗い宇宙の中の暖色グロー）
-  background: {
-    primary: '#05060a',
-    secondary: '#070910',
-    tertiary: '#0b0f18',
+export const brandPrototypeColors = {
+  main: {
+    dark: '#05060a',     // Primary text / dark backgrounds
+    light: '#fefcf5',    // Light backgrounds / text on dark (cream white)
+    midGray: '#6b7280',  // Secondary elements, captions
+    lightGray: '#0b0f18' // Subtle backgrounds, surfaces (dark mode)
   },
-
-  // テキスト
-  text: {
-    primary: '#fefcf5',  // ほんのりクリームがかった白
-    secondary: '#e5e7eb',
-    tertiary: '#9ca3af',
-    inverse: '#05060a',
-  },
-
-  // ボーダー
-  border: {
-    light: '#1f2933',
-    medium: '#111827',
-    dark: '#020617',
-  },
-
-  // Podタイプ (Self=Primary, Pair=Secondary)
-  podType: {
-    self: '#ffe66d',   // やわらかい黄
-    pair: '#ffb347',   // オレンジ
-    quad: '#ff7a3c',   // 深いオレンジ
-    circle: '#c8ff5a', // ネオン寄りライム（アクセント）
-    default: '#f59e0b',// 落ち着いたアンバー
-  },
-
-  // コンポーネント
-  component: {
-    tabBarActive: '#ffb347',
-    tabBarInactive: '#6b7280',
-    headerText: '#fefcf5',
-    subtitleText: '#d1d5db',
-    errorText: '#ff4b4b',
-  },
-
-  // ユーティリティ
-  white: '#ffffff',
-  black: '#000000',
-  transparent: 'transparent',
+  accent: {
+    primary: '#ffe66d',   // Soft yellow - selfPod
+    secondary: '#ffb347', // Amber orange - pairPod
+    third: '#ff7a3c',     // Deep orange - quadPod
+    fourth: '#c8ff5a'     // Neon lime - circlePod
+  }
 } as const;
 
-export type Colors = typeof colors;
+export type BrandPrototypeColors = typeof brandPrototypeColors;
