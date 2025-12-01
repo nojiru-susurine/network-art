@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mimoza App - Color Palette Proposals</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f5f9;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 16px;
+      color: #1e293b;
+      font-size: 28px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .palette-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .palette-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .palette-number {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .palette-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    .palette-desc {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .color-section {
+      padding: 20px 24px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+    .color-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .color-item {
+      flex: 1;
+      text-align: center;
+    }
+    .color-swatch {
+      height: 48px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    }
+    .color-label {
+      font-size: 10px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+    .color-hex {
+      font-size: 10px;
+      font-family: 'SF Mono', Monaco, monospace;
+      color: #94a3b8;
+    }
+    .pod-preview {
+      display: flex;
+      gap: 12px;
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+    .pod-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .pod-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+    .pod-label {
+      font-size: 11px;
+      color: #475569;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mimoza Color Palette Proposals</h1>
+  <p class="subtitle">パートナーシップ支援アプリのためのカラーパレット提案 — Pod: self → pair → quad</p>
+
+  <div class="grid">
+
+    <!-- Palette 1: Coral Garden -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 01</div>
+        <div class="palette-name">Coral Garden</div>
+        <div class="palette-desc">暖かいつながり — 信頼と温もりを表現</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #2d3748;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#2d3748</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fffbf7;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fffbf7</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #718096;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#718096</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f7f5f3;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f7f5f3</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #e8857b;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#e8857b</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #7c9eb8;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#7c9eb8</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #9f8fbc;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#9f8fbc</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #d4a574;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#d4a574</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #e8857b;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #7c9eb8;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #9f8fbc;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 2: Ocean Breeze -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 02</div>
+        <div class="palette-name">Ocean Breeze</div>
+        <div class="palette-desc">清潔感と信頼 — プロフェッショナルな印象</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #1a2f38;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#1a2f38</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ffffff;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#ffffff</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #64748b;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#64748b</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f1f5f9;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f1f5f9</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #0d9488;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#0d9488</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b82f6;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#3b82f6</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b5cf6;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#8b5cf6</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f59e0b;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#f59e0b</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #0d9488;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #3b82f6;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #8b5cf6;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 3: Sunset Bloom -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 03</div>
+        <div class="palette-name">Sunset Bloom</div>
+        <div class="palette-desc">有機的なつながり — ミモザの花をイメージ</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #292524;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#292524</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fefdfb;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fefdfb</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #78716c;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#78716c</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f5f5f4;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f5f5f4</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f5b942;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#f5b942</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #e07b54;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#e07b54</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #7c9a6e;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#7c9a6e</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78baf;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#a78baf</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #f5b942;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #e07b54;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #7c9a6e;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 4: Lavender Dreams -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 04</div>
+        <div class="palette-name">Lavender Dreams</div>
+        <div class="palette-desc">穏やかな調和 — 優しさと落ち着きを表現</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #2e2a3b;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#2e2a3b</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fdfcfe;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fdfcfe</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8b8698;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#8b8698</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f5f3f7;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f5f3f7</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #9f7aea;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#9f7aea</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ed8aa6;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#ed8aa6</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #6cb2c7;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#6cb2c7</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #b8d4a8;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#b8d4a8</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #9f7aea;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #ed8aa6;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #6cb2c7;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 5: Forest Path -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 05</div>
+        <div class="palette-name">Forest Path</div>
+        <div class="palette-desc">自然な成長 — 森の中の静かな道</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #1c2721;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#1c2721</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fafdf8;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fafdf8</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #6b7c72;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#6b7c72</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f0f4f1;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f0f4f1</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #4ade80;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#4ade80</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #2dd4bf;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#2dd4bf</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a3e635;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#a3e635</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fbbf24;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#fbbf24</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #4ade80;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #2dd4bf;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #a3e635;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 6: Rose Quartz -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 06</div>
+        <div class="palette-name">Rose Quartz</div>
+        <div class="palette-desc">愛情と癒し — ローズクォーツの優しい輝き</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #3b2f3d;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#3b2f3d</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fef9fa;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fef9fa</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #9c8a9e;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#9c8a9e</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f9f3f5;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f9f3f5</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f472b6;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#f472b6</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #c084fc;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#c084fc</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #67c5d1;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#67c5d1</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fca5a5;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#fca5a5</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #f472b6;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #c084fc;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #67c5d1;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 7: Nordic Calm -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 07</div>
+        <div class="palette-name">Nordic Calm</div>
+        <div class="palette-desc">北欧の静けさ — ミニマルで洗練された美</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #1e293b;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#1e293b</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f8fafc;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#f8fafc</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #94a3b8;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#94a3b8</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #e2e8f0;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#e2e8f0</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #60a5fa;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#60a5fa</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #a78bfa;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#a78bfa</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #5eead4;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#5eead4</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fda4af;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#fda4af</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #60a5fa;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #a78bfa;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #5eead4;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+    <!-- Palette 8: Golden Hour -->
+    <div class="palette-card">
+      <div class="palette-header">
+        <div class="palette-number">Palette 08</div>
+        <div class="palette-name">Golden Hour</div>
+        <div class="palette-desc">黄金の時間 — 夕暮れの温かな光</div>
+      </div>
+      <div class="color-section">
+        <div class="section-title">Main Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #27241d;"></div>
+            <div class="color-label">Dark</div>
+            <div class="color-hex">#27241d</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #fffef5;"></div>
+            <div class="color-label">Light</div>
+            <div class="color-hex">#fffef5</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #8d8473;"></div>
+            <div class="color-label">Mid Gray</div>
+            <div class="color-hex">#8d8473</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f5f3eb;"></div>
+            <div class="color-label">Light Gray</div>
+            <div class="color-hex">#f5f3eb</div>
+          </div>
+        </div>
+        <div class="section-title">Accent Colors</div>
+        <div class="color-row">
+          <div class="color-item">
+            <div class="color-swatch" style="background: #f59e0b;"></div>
+            <div class="color-label">Primary</div>
+            <div class="color-hex">#f59e0b</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #ef7d52;"></div>
+            <div class="color-label">Secondary</div>
+            <div class="color-hex">#ef7d52</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #84cc16;"></div>
+            <div class="color-label">Third</div>
+            <div class="color-hex">#84cc16</div>
+          </div>
+          <div class="color-item">
+            <div class="color-swatch" style="background: #e879a9;"></div>
+            <div class="color-label">Fourth</div>
+            <div class="color-hex">#e879a9</div>
+          </div>
+        </div>
+      </div>
+      <div class="pod-preview">
+        <div class="pod-item"><div class="pod-dot" style="background: #f59e0b;"></div><span class="pod-label">Self</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #ef7d52;"></div><span class="pod-label">Pair</span></div>
+        <div class="pod-item"><div class="pod-dot" style="background: #84cc16;"></div><span class="pod-label">Quad</span></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
